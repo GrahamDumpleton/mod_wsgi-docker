@@ -31,7 +31,7 @@ You can then build and run the Docker image:
 
 ```
 docker build -t my-python-app .
-docker run -it --rm -p 8000:8000 --name my-running-app my-python-app
+docker run -it --rm -p 8000:80 --name my-running-app my-python-app
 ```
 
 The Python web application should then be accessible at port 8000 of the
