@@ -1,4 +1,4 @@
-FROM mod_wsgi-express:python-2.7
+FROM grahamdumpleton/mod_wsgi-express:python-2.7
 
 WORKDIR /app
 
