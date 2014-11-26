@@ -11,6 +11,10 @@ Available images
 
 * grahamdumpleton/mod-wsgi-docker:python-2.7
 * grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
+* grahamdumpleton/mod-wsgi-docker:python-3.3
+* grahamdumpleton/mod-wsgi-docker:python-3.3-onbuild
+* grahamdumpleton/mod-wsgi-docker:python-3.4
+* grahamdumpleton/mod-wsgi-docker:python-3.4-onbuild
 
 How to use these images
 -----------------------
