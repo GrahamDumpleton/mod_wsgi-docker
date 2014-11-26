@@ -15,7 +15,7 @@ Create a ``Dockerfile`` in your Python web application project.
 
 ```
 FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
-CMD [ "wsgi.py" ]
+CMD [ "hello.wsgi" ]
 ```
 
 The list of ``CMD`` arguments should consist of the path to the WSGI script
@@ -36,3 +36,5 @@ docker run -it --rm -p 8000:80 --name my-running-app my-python-app
 
 The Python web application should then be accessible at port 8000 of the
 docker host.
+
+For additional examples see the [demos](demos) directory.
