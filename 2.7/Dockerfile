@@ -20,6 +20,7 @@ RUN cd /app/.build && PATH=/app/.build/env/bin:$PATH && \
 RUN rm -rf /app/.build
 
 RUN apt-get purge -y python python-minimal python2.7-minimal
+RUN apt-get purge -y python3 python3-minimal
 
 ENV PATH /app/.vendor/python/bin:/app/.vendor/apache/bin:$PATH
 
