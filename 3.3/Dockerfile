@@ -17,6 +17,13 @@ COPY buildout.cfg /app/.build/
 RUN cd /app/.build && PATH=/app/.build/env/bin:$PATH && \
     buildout -v -v
 
+RUN cd /app/.vendor/python/bin && \
+    ln -s easy_install-3.3 easy_install && \
+    ln -s idle3 idle && \
+    ln -s pydoc3 pydoc && \
+    ln -s python3 python && \
+    ln -s python-config3 python-config
+
 RUN rm -rf /app/.build
 
 RUN apt-get purge -y python python-minimal python2.7-minimal
