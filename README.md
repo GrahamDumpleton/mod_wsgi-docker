@@ -6,15 +6,15 @@ and mod_wsgi-express.
 
 ## Available images
 
-  * grahamdumpleton/mod_wsgi-docker:python-2.7
-  * grahamdumpleton/mod_wsgi-docker:python-2.7-onbuild
+  * grahamdumpleton/mod-wsgi-docker:python-2.7
+  * grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
 
 ## How to use these images
 
 Create a ``Dockerfile`` in your Python web application project.
 
 ```
-FROM grahamdumpleton/mod_wsgi-docker:python-2.7-onbuild
+FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
 CMD [ "wsgi.py" ]
 ```
 
