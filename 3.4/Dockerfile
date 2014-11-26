@@ -24,8 +24,7 @@ RUN apt-get purge -y python3 python3-minimal
 
 ENV PATH /app/.vendor/python/bin:/app/.vendor/apache/bin:$PATH
 
-RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
-    pip install virtualenv
+RUN pip install virtualenv
 
 RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/cbf54ab64a87d901af48899036c7c9f05b8aaa70.zip
 
