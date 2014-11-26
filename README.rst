@@ -18,7 +18,7 @@ Prebuilt images available are:
 * grahamdumpleton/mod-wsgi-docker:python-3.4
 * grahamdumpleton/mod-wsgi-docker:python-3.4-onbuild
 
-See `mod_wsgi-docker <https://registry.hub.docker.com/u/grahamdumpleton/mod-wsgi-docker/>`_
+See `mod-wsgi-docker <https://registry.hub.docker.com/u/grahamdumpleton/mod-wsgi-docker/>`_
 on Docker Hub for more information.
 
 How to use these images
