@@ -1,22 +1,24 @@
-# MOD_WSGI (DOCKER)
+=================
+MOD_WSGI (DOCKER)
+=================
 
 The mod_wsgi-docker package is a companion package for Apache/mod_wsgi. It
 contains configurations for building docker images which bundle up Apache
 and mod_wsgi-express.
 
-## Available images
+Available images
+----------------
 
-  * grahamdumpleton/mod-wsgi-docker:python-2.7
-  * grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
+* grahamdumpleton/mod-wsgi-docker:python-2.7
+* grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
 
-## How to use these images
+How to use these images
+-----------------------
 
-Create a ``Dockerfile`` in your Python web application project.
+Create a ``Dockerfile`` in your Python web application project::
 
-```
-FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
-CMD [ "hello.wsgi" ]
-```
+    FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
+    CMD [ "hello.wsgi" ]
 
 The list of ``CMD`` arguments should consist of the path to the WSGI script
 file for the Python web application and any additional arguments you wish
@@ -27,14 +29,12 @@ be all you need to bootstrap most applications. The build will ``COPY`` a
 ``requirements.txt`` file, ``RUN pip install`` on said file, and then copy
 the current directory into ``/app``.
 
-You can then build and run the Docker image:
+You can then build and run the Docker image::
 
-```
-docker build -t my-python-app .
-docker run -it --rm -p 8000:80 --name my-running-app my-python-app
-```
+    docker build -t my-python-app .
+    docker run -it --rm -p 8000:80 --name my-running-app my-python-app
 
 The Python web application should then be accessible at port 8000 of the
 docker host.
 
-For additional examples see the [demos](demos) directory.
+For additional examples see the 'demos' sub directory.
