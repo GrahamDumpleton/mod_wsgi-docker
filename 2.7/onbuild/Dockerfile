@@ -9,6 +9,8 @@ ONBUILD COPY . /app
 
 EXPOSE 80
 
+ENV PYTHONHASHSEED random
+
 ENV WSGI_RUN_USER www-data
 ENV WSGI_RUN_GROUP www-data
 
