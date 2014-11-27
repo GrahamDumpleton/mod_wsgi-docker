@@ -30,6 +30,11 @@ RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
 
 RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/cbf54ab64a87d901af48899036c7c9f05b8aaa70.zip
 
+RUN find /app/.vendor/python/lib \
+    \( -type d -and -name test -or -name tests \) -or \
+    \( -type f -and -name '*.pyc' -or -name '*.pyo' \) | \
+    xargs rm -rf
+
 ENV LANG C.UTF-8
 
 WORKDIR /app
