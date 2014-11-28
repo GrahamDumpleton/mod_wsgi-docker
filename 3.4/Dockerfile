@@ -35,7 +35,7 @@ ENV PATH /app/.vendor/python/bin:/app/.vendor/apache/bin:$PATH
 
 RUN pip install virtualenv
 
-RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/cbf54ab64a87d901af48899036c7c9f05b8aaa70.zip
+RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/19989e44bc3907c6967bf54d42ad3c1820814a97.zip
 
 RUN find /app/.vendor/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
