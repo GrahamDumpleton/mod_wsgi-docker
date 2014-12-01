@@ -35,7 +35,7 @@ ENV PATH /app/.vendor/python/bin:/app/.vendor/apache/bin:$PATH
 RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
     pip install virtualenv
 
-RUN pip install 'mod_wsgi==4.4.0'
+RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/7fff94f13909c4bcc05d6c46ebf17e183c2c310a.zip
 
 RUN find /app/.vendor/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
