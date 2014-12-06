@@ -1,10 +1,9 @@
 FROM debian:jessie
 
 RUN apt-get update && \
-    apt-get install -y ca-certificates libssl1.0.0 curl gcc \
+    apt-get install -y ca-certificates libssl1.0.0 curl gcc file \
         libc6-dev libssl-dev make xz-utils zlib1g-dev libsqlite3-dev \
-        libapr1 libapr1-dev libaprutil1 libaprutil1-dev libpcre++0 \
-        libpcre++-dev python-pip python-virtualenv virtualenv \
+        libpcre++0 libpcre++-dev python-pip python-virtualenv virtualenv \
         --no-install-recommends && rm -r /var/lib/apt/lists/*
 
 RUN mkdir -p /app /app/.build && virtualenv /app/.build/env
@@ -28,7 +27,7 @@ ENV PATH /app/.vendor/python/bin:/app/.vendor/apache/bin:$PATH
 RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
     pip install virtualenv
 
-RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/7fff94f13909c4bcc05d6c46ebf17e183c2c310a.zip
+RUN pip install https://github.com/GrahamDumpleton/mod_wsgi/archive/ee330fec18b8caafb10b3e517fff75bd58a0d974.zip
 
 RUN find /app/.vendor/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
