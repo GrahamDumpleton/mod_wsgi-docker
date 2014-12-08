@@ -48,9 +48,9 @@ cd /app
 #
 #   https://github.com/docker/docker/issues/9547
 
-if [ -x docker/hooks/pre-pip-install ]; then
-    echo " -----> Running pre-pip-install hook"
-    docker/hooks/pre-pip-install
+if [ -x .docker/action_hooks/pre-build ]; then
+    echo " -----> Running .docker/action_hooks/pre-build"
+    .docker/action_hooks/pre-build
 fi
 
 # Check for the existance of a 'requirements.txt' file for 'pip'. If
@@ -105,9 +105,9 @@ fi
 #
 #   https://github.com/docker/docker/issues/9547
 
-if [ -x docker/hooks/post-pip-install ]; then
-    echo " -----> Running post-pip-install hook"
-    docker/hooks/post-pip-install
+if [ -x .docker/action_hooks/build ]; then
+    echo " -----> Running .docker/action_hooks/build"
+    .docker/action_hooks/build
 fi
 
 # Clean up any temporary files, including the results of checking out
