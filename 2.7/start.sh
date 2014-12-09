@@ -25,29 +25,15 @@ if [ -x .docker/action_hooks/deploy ]; then
     .docker/action_hooks/deploy
 fi
 
-# Now run the the actual application. This is run in the background. It
-# will log to stdout/stderr.
+# Now run the the actual application under Apache/mod_wsgi. This is run
+# in the foreground, replacing this process and adopting process ID 1 so
+# that signals are received properly and Apache will shutdown properly
+# when the container is being stopped. It will log to stdout/stderr.
 
-PORT=${PORT:-80}
+SERVER_ARGS="--log-to-terminal --startup-log --port 80"
 
-mod_wsgi-express start-server --log-to-terminal --startup-log \
-    --port "${PORT}" "$@" &
-
-# Run any user supplied script to be run after starting the application
-# in the actual container. The script must be executable in order to be
-# run. It is not possible for this script to change the permissions so
-# it is executable and then run it, due to some docker bug which results
-# in the text file being busy. For more details see:
-#
-#   https://github.com/docker/docker/issues/9547
-
-if [ -x .docker/action_hooks/post-deploy ]; then
-    echo " -----> Running .docker/action_hooks/post-deploy"
-    .docker/action_hooks/post-deploy &
+if [ -f .docker/envvars ]; then
+    SERVER_ARGS="$SERVER_ARGS --envvars-script .docker/envvars"
 fi
 
-# Now wait for all child processes to exit. Under normal circumstances
-# this should block until a signal has been received by the container
-# telling it to shutdown.
-
-wait
+exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
