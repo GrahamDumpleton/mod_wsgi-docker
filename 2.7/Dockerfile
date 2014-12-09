@@ -2,7 +2,7 @@ FROM debian:jessie
 
 ENV LANG C.UTF-8
 
-RUN apt-get update && \
+RUN rm -r /var/lib/apt/lists/* && apt-get update && \
     apt-get install -y ca-certificates libssl1.0.0 curl gcc file \
         libc6-dev libssl-dev make xz-utils zlib1g-dev libsqlite3-dev \
         libpcre++0 libpcre++-dev python-pip python-virtualenv virtualenv \
