@@ -70,8 +70,4 @@ fi
 
 SERVER_ARGS="--log-to-terminal --startup-log --port 80"
 
-if [ -f .docker/envvars ]; then
-    SERVER_ARGS="$SERVER_ARGS --envvars-script .docker/envvars"
-fi
-
 exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
