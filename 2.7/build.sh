@@ -38,6 +38,14 @@ set -eo pipefail
 
 cd /app
 
+# Create the '.docker/user_vars' directory for storage of user defined
+# environment variables if it doesn't already exist. These can be
+# created by the user from any hook script. The name of the file
+# corresponds to the name of the environment variable and the contents
+# of the file the value to set the environment variable to.
+
+mkdir -p .docker/user_vars
+
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
 # installed that may be required by any Python modules which are being

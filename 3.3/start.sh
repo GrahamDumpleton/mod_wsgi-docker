@@ -12,6 +12,44 @@
 # force the use of port 80. If necessary the port to use can be overridden
 # using the PORT environment variable.
 
+# Docker will have set any environment variables defined in the image or
+# on the command line when the container has been run. Here we are going
+# to look for any statically defined environment variables provided by
+# the user as part of the actual application. These will have been
+# placed in the '.docker/user_vars' directory. The name of the file
+# corresponds to the name of the environment variable and the contents
+# of the file the value to set the environment variable to. Each of the
+# environment variables is set and exported.
+
+envvars=
+
+for name in `ls .docker/user_vars`; do
+    export $name=`cat .docker/user_vars/$name`
+    envvars="$envvars $name"
+done
+
+# Run any user supplied script to be run to set, modify or delete the
+# environment variables.
+
+if [ -x .docker/action_hooks/deploy-env ]; then
+    echo " -----> Running .docker/action_hooks/deploy-env"
+    .docker/action_hooks/deploy-env
+fi
+
+# Go back and reset all the environment variables based on additions or
+# changes. Unset any for which the environment variable file no longer
+# exists, albeit in practice that is probably unlikely.
+
+for name in `ls .docker/user_vars`; do
+    export $name=`cat .docker/user_vars/$name`
+done
+
+for name in $envvars; do
+    if test ! -f .docker/user_vars/$name; then
+        unset $name
+    fi
+done
+
 # Run any user supplied script to be run prior to starting the
 # application in the actual container. The script must be executable in
 # order to be run. It is not possible for this script to change the
