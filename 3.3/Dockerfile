@@ -38,7 +38,7 @@ ENV PATH /app/.docker/python/bin:/app/.docker/apache/bin:$PATH
 RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
     pip install virtualenv
 
-RUN pip install mod_wsgi==4.4.1
+RUN pip install mod_wsgi==4.4.2
 
 RUN find /app/.docker/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
