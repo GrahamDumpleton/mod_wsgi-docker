@@ -2,13 +2,15 @@
 
 FROM debian:jessie
 
-ENV LANG C.UTF-8
-
 RUN rm -r /var/lib/apt/lists/* && apt-get update && \
-    apt-get install -y ca-certificates libssl1.0.0 curl gcc file \
+    apt-get install -y ca-certificates locales libssl1.0.0 curl gcc file \
         libc6-dev libssl-dev make xz-utils zlib1g-dev libsqlite3-dev \
         libpcre++0 libpcre++-dev python-pip python-virtualenv virtualenv \
         --no-install-recommends && rm -r /var/lib/apt/lists/*
+
+RUN echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen && locale-gen
+
+ENV LANG en_US.UTF-8
 
 RUN mkdir -p /app /app/.build && virtualenv /app/.build/env
 
@@ -22,7 +24,7 @@ COPY buildout.cfg /app/.build/
 RUN cd /app/.build && PATH=/app/.build/env/bin:$PATH && \
     buildout -v -v
 
-RUN cd /app/.docker/python/bin && \
+RUN cd /app/.whiskey/python/bin && \
     ln -s easy_install-3.3 easy_install && \
     ln -s idle3 idle && \
     ln -s pydoc3 pydoc && \
@@ -33,25 +35,21 @@ RUN rm -rf /app/.build
 
 RUN apt-get purge -y python.* libpython.* virtualenv
 
-ENV PATH /app/.docker/python/bin:/app/.docker/apache/bin:$PATH
+ENV PATH /app/.whiskey/python/bin:$PATH
 
 RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
     pip install virtualenv
 
-RUN pip install mod_wsgi==4.4.2
-
-RUN find /app/.docker/python/lib \
+RUN find /app/.whiskey/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
     \( -type f -and -name '*.pyc' -or -name '*.pyo' \) | \
     xargs rm -rf
 
-RUN mkdir /app/.docker/scripts
+RUN mkdir /app/.whiskey/scripts
 
-COPY build.sh /app/.docker/scripts/mod_wsgi-docker-build
-COPY start.sh /app/.docker/scripts/mod_wsgi-docker-start
-COPY shell.sh /app/.docker/scripts/mod_wsgi-docker-shell
-
-ENV PATH /app/.docker/scripts:$PATH
+COPY build.sh /app/.whiskey/python/bin/mod_wsgi-docker-build
+COPY start.sh /app/.whiskey/python/bin/mod_wsgi-docker-start
+COPY shell.sh /app/.whiskey/python/bin/mod_wsgi-docker-shell
 
 ENV PYTHONHASHSEED random
 

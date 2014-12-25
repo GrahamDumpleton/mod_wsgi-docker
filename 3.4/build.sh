@@ -34,17 +34,50 @@
 
 set -eo pipefail
 
+# Mark what runtime this is.
+
+WHISKEY_RUNTIME=docker
+export WHISKEY_RUNTIME
+
+# Set up the home directory for the application.
+
+WHISKEY_HOMEDIR=/app
+export WHISKEY_HOMEDIR
+
+# Set up the bin directory where our scripts will be.
+
+WHISKEY_BINDIR=/app/.whiskey/python/bin
+export WHISKEY_BINDIR
+
 # Make sure we are in the correct working directory for the application.
 
-cd /app
+cd $WHISKEY_HOMEDIR
 
-# Create the '.docker/user_vars' directory for storage of user defined
+# Copy the Apache executables into the Python directory so they can
+# be found without working out how to override the PATH.
+
+cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/apxs $WHISKEY_BINDIR/apxs
+cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/httpd $WHISKEY_BINDIR/httpd
+cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/rotatelogs $WHISKEY_BINDIR/rotatelogs
+cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/ab $WHISKEY_BINDIR/ab
+
+# Create the '.whiskey/user_vars' directory for storage of user defined
 # environment variables if it doesn't already exist. These can be
 # created by the user from any hook script. The name of the file
 # corresponds to the name of the environment variable and the contents
 # of the file the value to set the environment variable to.
+#
+# Note that because the path to the user_vars directory was changed, we
+# need to warn about old deprecated name. In case that the user is using
+# old name, just symlink the new location to the old.
 
-mkdir -p .docker/user_vars
+if test -d .docker/user_vars; then
+    echo " -----> Linking deprecated .docker/user_vars"
+    echo "WARNING: Use directory .whiskey/user_vars instead."
+    ln -s $WHISKEY_HOMEDIR/.docker/user_vars .whiskey/user_vars
+else
+    test ! -d .whiskey/user_vars && mkdir -p .whiskey/user_vars
+fi
 
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
@@ -55,20 +88,21 @@ mkdir -p .docker/user_vars
 # being busy. For more details see:
 #
 #   https://github.com/docker/docker/issues/9547
+#
+# Note that because path to the action_hooks directory was changed, we
+# need to warn about old deprecated name. In case that the user is using
+# old name, just symlink the new location to the old. If both exist, then
+# this should fail.
 
-if [ -x .docker/action_hooks/pre-build ]; then
-    echo " -----> Running .docker/action_hooks/pre-build"
-    .docker/action_hooks/pre-build
+if test -f .docker/action_hooks; then
+    echo " -----> Linking deprecated .docker/action_hooks"
+    echo "WARNING: Use directory .whiskey/action_hooks instead."
+    ln -s $WHISKEY_HOMEDIR/.docker/action_hooks .whiskey/action_hooks
 fi
 
-# Check for the existance of a 'requirements.txt' file for 'pip'. If
-# there isn't, but there is a 'setup.py' file, assume that the directory
-# is a package that needs to be installed.
-
-if [ ! -f requirements.txt ]; then
-    if [ -f setup.py ]; then
-        echo "-e ." > requirements.txt
-    fi
+if [ -x .whiskey/action_hooks/pre-build ]; then
+    echo " -----> Running .whiskey/action_hooks/pre-build"
+    .whiskey/action_hooks/pre-build
 fi
 
 # Check whether there are any git repositories referenced from the
@@ -101,8 +135,13 @@ fi
 if [ -f requirements.txt ]; then
     echo " -----> Installing dependencies with pip"
     pip install -r requirements.txt -U --allow-all-external \
-        --exists-action=w --src=.docker/tmp
+        --exists-action=w --src=.whiskey/tmp
 fi
+
+# Build and install mod_wsgi.
+
+$WHISKEY_BINDIR/pip install -U \
+    https://github.com/GrahamDumpleton/mod_wsgi/archive/develop.zip
 
 # Run any user supplied script to run after installing any application
 # dependencies. This is to allow any application specific setup scripts
@@ -113,12 +152,12 @@ fi
 #
 #   https://github.com/docker/docker/issues/9547
 
-if [ -x .docker/action_hooks/build ]; then
-    echo " -----> Running .docker/action_hooks/build"
-    .docker/action_hooks/build
+if [ -x .whiskey/action_hooks/build ]; then
+    echo " -----> Running .whiskey/action_hooks/build"
+    .whiskey/action_hooks/build
 fi
 
 # Clean up any temporary files, including the results of checking out
 # any source code repositories when doing a 'pip install' from a VCS.
 
-rm -rf .docker/tmp
+rm -rf .whiskey/tmp
