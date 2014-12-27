@@ -100,4 +100,9 @@ fi
 
 SERVER_ARGS="--log-to-terminal --startup-log --port 80"
 
+if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
+        x"$NEW_RELIC_CONFIG_FILE" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --with-newrelic"
+fi
+
 exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
