@@ -140,7 +140,7 @@ fi
 
 # Build and install mod_wsgi.
 
-$WHISKEY_BINDIR/pip install -U mod_wsgi==4.4.3
+$WHISKEY_BINDIR/pip install -U mod_wsgi==4.4.10
 
 # Run any user supplied script to run after installing any application
 # dependencies. This is to allow any application specific setup scripts
