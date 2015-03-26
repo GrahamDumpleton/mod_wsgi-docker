@@ -94,7 +94,7 @@ fi
 # old name, just symlink the new location to the old. If both exist, then
 # this should fail.
 
-if test -f .docker/action_hooks; then
+if test -d .docker/action_hooks; then
     echo " -----> Linking deprecated .docker/action_hooks"
     echo "WARNING: Use directory .whiskey/action_hooks instead."
     ln -s $WHISKEY_HOMEDIR/.docker/action_hooks .whiskey/action_hooks
