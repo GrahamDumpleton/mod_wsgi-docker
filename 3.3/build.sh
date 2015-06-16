@@ -44,9 +44,12 @@ export WHISKEY_RUNTIME
 WHISKEY_HOMEDIR=/app
 export WHISKEY_HOMEDIR
 
-# Set up the bin directory where our scripts will be.
+# Set up the system and bin directory where our scripts will be.
 
-WHISKEY_BINDIR=/app/.whiskey/python/bin
+WHISKEY_SYSDIR=/.whiskey
+export WHISKEY_SYSDIR
+
+WHISKEY_BINDIR=$WHISKEY_SYSDIR/python/bin
 export WHISKEY_BINDIR
 
 # Make sure we are in the correct working directory for the application.
@@ -56,10 +59,10 @@ cd $WHISKEY_HOMEDIR
 # Copy the Apache executables into the Python directory so they can
 # be found without working out how to override the PATH.
 
-cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/apxs $WHISKEY_BINDIR/apxs
-cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/httpd $WHISKEY_BINDIR/httpd
-cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/rotatelogs $WHISKEY_BINDIR/rotatelogs
-cp $WHISKEY_HOMEDIR/.whiskey/apache/bin/ab $WHISKEY_BINDIR/ab
+cp $WHISKEY_SYSDIR/apache/bin/apxs $WHISKEY_BINDIR/apxs
+cp $WHISKEY_SYSDIR/apache/bin/httpd $WHISKEY_BINDIR/httpd
+cp $WHISKEY_SYSDIR/apache/bin/rotatelogs $WHISKEY_BINDIR/rotatelogs
+cp $WHISKEY_SYSDIR/apache/bin/ab $WHISKEY_BINDIR/ab
 
 # Create the '.whiskey/user_vars' directory for storage of user defined
 # environment variables if it doesn't already exist. These can be
@@ -140,7 +143,7 @@ fi
 
 # Build and install mod_wsgi.
 
-$WHISKEY_BINDIR/pip install -U mod_wsgi==4.4.12
+$WHISKEY_BINDIR/pip install -U mod_wsgi==4.4.13
 
 # Run any user supplied script to run after installing any application
 # dependencies. This is to allow any application specific setup scripts

@@ -22,9 +22,12 @@ export WHISKEY_RUNTIME
 WHISKEY_HOMEDIR=/app
 export WHISKEY_HOMEDIR
 
-# Set up the bin directory where our scripts will be.
+# Set up the system and bin directory where our scripts will be.
 
-WHISKEY_BINDIR=/app/.whiskey/python/bin
+WHISKEY_SYSDIR=/.whiskey
+export WHISKEY_SYSDIR
+
+WHISKEY_BINDIR=$WHISKEY_SYSDIR/python/bin
 export WHISKEY_BINDIR
 
 # Set up the user_vars directory where environment variable updates
@@ -53,10 +56,12 @@ cd $WHISKEY_HOMEDIR
 
 envvars=
 
-for name in `ls .whiskey/user_vars`; do
-    export $name=`cat .whiskey/user_vars/$name`
-    envvars="$envvars $name"
-done
+if [ -d .whiskey/user_vars ]; then
+    for name in `ls .whiskey/user_vars`; do
+        export $name=`cat .whiskey/user_vars/$name`
+        envvars="$envvars $name"
+    done
+fi
 
 # Run any user supplied script to be run to set, modify or delete the
 # environment variables.
@@ -70,15 +75,17 @@ fi
 # changes. Unset any for which the environment variable file no longer
 # exists, albeit in practice that is probably unlikely.
 
-for name in `ls .whiskey/user_vars`; do
-    export $name=`cat .whiskey/user_vars/$name`
-done
+if [ -d .whiskey/user_vars ]; then
+    for name in `ls .whiskey/user_vars`; do
+        export $name=`cat .whiskey/user_vars/$name`
+    done
 
-for name in $envvars; do
-    if test ! -f .whiskey/user_vars/$name; then
-        unset $name
-    fi
-done
+    for name in $envvars; do
+        if test ! -f .whiskey/user_vars/$name; then
+            unset $name
+        fi
+    done
+fi
 
 # Run any user supplied script to be run prior to starting the
 # application in the actual container. The script must be executable in
