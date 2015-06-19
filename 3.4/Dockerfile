@@ -39,9 +39,8 @@ RUN apt-get purge -y python.* libpython.* virtualenv
 
 ENV PATH /.whiskey/python/bin:$PATH
 
-RUN pip install -U pip
-
-RUN pip install virtualenv
+RUN pip install --no-cache-dir virtualenv && \
+    pip install --no-cache-dir -U pip
 
 RUN find /.whiskey/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
