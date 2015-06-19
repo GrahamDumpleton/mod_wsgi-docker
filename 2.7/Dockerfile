@@ -5,7 +5,7 @@ FROM debian:jessie
 RUN rm -r /var/lib/apt/lists/* && apt-get update && \
     apt-get install -y ca-certificates locales libssl1.0.0 curl gcc file \
         libc6-dev libssl-dev make xz-utils zlib1g-dev libbz2-dev \
-        libsqlite3-dev libpcre++0 libpcre++-dev python-pip \
+        libreadline-dev libsqlite3-dev libpcre++0 libpcre++-dev python-pip \
         python-virtualenv virtualenv --no-install-recommends && \
         rm -r /var/lib/apt/lists/*
 
