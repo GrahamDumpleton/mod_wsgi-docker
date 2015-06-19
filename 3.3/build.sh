@@ -128,7 +128,7 @@ fi
 if [ -f requirements.txt ]; then
     if (grep -Fiq "hg+" requirements.txt); then
         echo " -----> Installing mercurial"
-        pip install -U mercurial
+        pip install --no-cache-dir -U mercurial
     fi
 fi
 
@@ -137,13 +137,13 @@ fi
 
 if [ -f requirements.txt ]; then
     echo " -----> Installing dependencies with pip"
-    pip install -r requirements.txt -U --allow-all-external \
-        --exists-action=w --src=.whiskey/tmp
+    pip install --no-cache-dir -U --allow-all-external \
+        --exists-action=w --src=.whiskey/tmp -r requirements.txt
 fi
 
 # Build and install mod_wsgi.
 
-$WHISKEY_BINDIR/pip install -U mod_wsgi==4.4.13
+pip install --no-cache-dir -U mod_wsgi==4.4.13
 
 # Run any user supplied script to run after installing any application
 # dependencies. This is to allow any application specific setup scripts
