@@ -32,7 +32,7 @@ RUN apt-get purge -y python.* libpython.* virtualenv
 ENV PATH /.whiskey/python/bin:$PATH
 
 RUN curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python && \
-    pip install virtualenv
+    pip install virtualenv && pip install -U pip
 
 RUN find /.whiskey/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
