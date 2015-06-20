@@ -113,6 +113,16 @@ if [ -f requirements.txt ]; then
     fi
 fi
 
+# Check to see if a 'wheelhouse' directory has been provided from which
+# 'pip' can source required packages for immediate installation rather
+# than having to download then from PyPi.
+
+if [ -d .whiskey/wheelhouse ]; then
+    echo " -----> Detected wheelhouse for pip"
+    PIP_FIND_LINKS=.whiskey/wheelhouse
+    export PIP_FIND_LINKS
+fi
+
 # Check whether there are any Mercurial repositories referenced from the
 # 'requirements.txt file. If there are then we need to first explicitly
 # install Mercurial and only then run 'pip'.
