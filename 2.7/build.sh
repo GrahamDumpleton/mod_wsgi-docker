@@ -56,14 +56,6 @@ export WHISKEY_BINDIR
 
 cd $WHISKEY_HOMEDIR
 
-# Copy the Apache executables into the Python directory so they can
-# be found without working out how to override the PATH.
-
-cp $WHISKEY_SYSDIR/apache/bin/apxs $WHISKEY_BINDIR/apxs
-cp $WHISKEY_SYSDIR/apache/bin/httpd $WHISKEY_BINDIR/httpd
-cp $WHISKEY_SYSDIR/apache/bin/rotatelogs $WHISKEY_BINDIR/rotatelogs
-cp $WHISKEY_SYSDIR/apache/bin/ab $WHISKEY_BINDIR/ab
-
 # Create the '.whiskey/user_vars' directory for storage of user defined
 # environment variables if it doesn't already exist. These can be
 # created by the user from any hook script. The name of the file
@@ -140,10 +132,6 @@ if [ -f requirements.txt ]; then
     pip install --no-cache-dir -U --allow-all-external \
         --exists-action=w --src=.whiskey/tmp -r requirements.txt
 fi
-
-# Build and install mod_wsgi.
-
-pip install --no-cache-dir -U mod_wsgi==4.4.13
 
 # Run any user supplied script to run after installing any application
 # dependencies. This is to allow any application specific setup scripts

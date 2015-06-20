@@ -37,10 +37,16 @@ RUN rm -rf /.whiskey/build
 
 RUN apt-get purge -y python.* libpython.* virtualenv
 
+RUN cp /.whiskey/apache/bin/apxs /.whiskey/python/bin/ && \
+    cp /.whiskey/apache/bin/httpd /.whiskey/python/bin/ && \
+    cp /.whiskey/apache/bin/rotatelogs /.whiskey/python/bin/ && \
+    cp /.whiskey/apache/bin/ab /.whiskey/python/bin/
+
 ENV PATH /.whiskey/python/bin:$PATH
 
 RUN pip install --no-cache-dir virtualenv && \
-    pip install --no-cache-dir -U pip
+    pip install --no-cache-dir -U pip && \
+    pip install --no-cache-dir -U mod_wsgi==4.4.13
 
 RUN find /.whiskey/python/lib \
     \( -type d -and -name test -or -name tests \) -or \
