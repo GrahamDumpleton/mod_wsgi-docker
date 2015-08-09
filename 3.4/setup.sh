@@ -80,13 +80,13 @@ mkdir $BUILD_ROOT/python
 
 tar -xC $BUILD_ROOT/python --strip-components=1 -f $BUILD_ROOT/python.tar.gz
 
-curl -SL -o $BUILD_ROOT/apr.tar.gz http://apache.mirror.serversaustralia.com.au/apr/apr-$APR_VERSION.tar.gz
+curl -SL -o $BUILD_ROOT/apr.tar.gz http://mirror.ventraip.net.au/apache/apr/apr-$APR_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apr
 
 tar -xC $BUILD_ROOT/apr --strip-components=1 -f $BUILD_ROOT/apr.tar.gz
 
-curl -SL -o $BUILD_ROOT/apr-util.tar.gz http://apache.mirror.serversaustralia.com.au/apr/apr-util-$APR_UTIL_VERSION.tar.gz
+curl -SL -o $BUILD_ROOT/apr-util.tar.gz http://mirror.ventraip.net.au/apache/apr/apr-util-$APR_UTIL_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apr-util
 
