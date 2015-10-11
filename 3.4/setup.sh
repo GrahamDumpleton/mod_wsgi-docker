@@ -206,6 +206,10 @@ rm -rf $BUILD_ROOT
 
 rm -r /var/lib/apt/lists/*
 
-# Create empty directory to be used as the application directory.
+# Create empty directory to be used as the application directory
+# and set the ownership of it to that of default user that WSGI
+# application is expected to run as.
 
 mkdir -p /app
+
+chown $MOD_WSGI_USER:$MOD_WSGI_GROUP /app
