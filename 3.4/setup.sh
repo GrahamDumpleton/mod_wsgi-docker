@@ -80,6 +80,12 @@ mkdir $BUILD_ROOT/python
 
 tar -xC $BUILD_ROOT/python --strip-components=1 -f $BUILD_ROOT/python.tar.gz
 
+curl -SL -o $BUILD_ROOT/nghttp2.tar.gz https://github.com/tatsuhiro-t/nghttp2/releases/download/v$NGHTTP2_VERSION/nghttp2-$NGHTTP2_VERSION.tar.gz
+
+mkdir $BUILD_ROOT/nghttp2
+
+tar -xC $BUILD_ROOT/nghttp2 --strip-components=1 -f $BUILD_ROOT/nghttp2.tar.gz
+
 curl -SL -o $BUILD_ROOT/apr.tar.gz http://mirror.ventraip.net.au/apache/apr/apr-$APR_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apr
@@ -149,6 +155,13 @@ esac
 
 # Build Apache from source code.
 
+cd $BUILD_ROOT/nghttp2
+
+./configure --prefix=$INSTALL_ROOT/nghttp2
+
+make
+make install
+
 cd $BUILD_ROOT/apr
 
 ./configure --prefix=$INSTALL_ROOT/apache
@@ -167,9 +180,10 @@ make install
 cd $BUILD_ROOT/apache
 
 ./configure --prefix=$INSTALL_ROOT/apache --enable-mpms-shared=all \
-    --with-mpm=event --enable-so --enable-rewrite \
+    --with-mpm=event --enable-so --enable-rewrite --enable-http2 \
     --with-apr=$INSTALL_ROOT/apache/bin/apr-1-config \
     --with-apr-util=$INSTALL_ROOT/apache/bin/apu-1-config \
+    --with-nghttp2=$INSTALL_ROOT/nghttp2
 
 make
 make install

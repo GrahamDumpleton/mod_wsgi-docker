@@ -1,9 +1,10 @@
 FROM debian:jessie
 
 ENV PYTHON_VERSION=3.5.0 \
+    NGHTTP2_VERSION=1.3.4 \
     APR_VERSION=1.5.2 \
     APR_UTIL_VERSION=1.5.4 \
-    APACHE_VERSION=2.4.16 \
+    APACHE_VERSION=2.4.17 \
     MOD_WSGI_VERSION=4.4.19
 
 COPY setup.sh /usr/local/bin/mod_wsgi-docker-setup
