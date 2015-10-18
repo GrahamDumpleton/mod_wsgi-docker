@@ -66,6 +66,7 @@ mkdir -p $BUILD_ROOT
 
 test ! -z "$PYTHON_VERSION" || exit 1
 
+test ! -z "$NGHTTP2_VERSION" || exit 1
 test ! -z "$APR_VERSION" || exit 1
 test ! -z "$APR_UTIL_VERSION" || exit 1
 test ! -z "$APACHE_VERSION" || exit 1
