@@ -232,6 +232,10 @@ if test x"$MOD_WSGI_LOG_LEVEL" != x""; then
     SERVER_ARGS="$SERVER_ARGS --log-level $MOD_WSGI_LOG_LEVEL"
 fi
 
+if test x"$MOD_WSGI_RELOAD_ON_CHANGES" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --reload-on-changes"
+fi
+
 if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
         x"$NEW_RELIC_CONFIG_FILE" != x""; then
     SERVER_ARGS="$SERVER_ARGS --with-newrelic"
