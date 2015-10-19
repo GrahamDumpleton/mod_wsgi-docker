@@ -44,13 +44,15 @@ export WHISKEY_RUNTIME
 WHISKEY_HOMEDIR=/app
 export WHISKEY_HOMEDIR
 
-# Set up the system and bin directory where our scripts will be.
+# Set up the data directory for the application.
 
-WHISKEY_SYSDIR=/.whiskey
-export WHISKEY_SYSDIR
+WHISKEY_DATADIR=/data
+export WHISKEY_DATADIR
 
-WHISKEY_BINDIR=$WHISKEY_SYSDIR/python/bin
-export WHISKEY_BINDIR
+# Set up the system directory where we keep runtime files.
+
+WHISKEY_CONFDIR=/.whiskey
+export WHISKEY_CONFDIR
 
 # Make sure we are in the correct working directory for the application.
 

@@ -37,9 +37,9 @@ apt-get update
 # are needed based on users code, such as database clients, they should
 # be installed by the user from the build hooks.
 
-apt-get install -y ca-certificates locales curl gcc file make xz-utils \
-    mime-support libbz2-dev libc6-dev libdb-dev libexpat1-dev libffi-dev \
-    libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev \
+apt-get install -y ca-certificates locales curl gcc file make cmake \
+    xz-utils mime-support libbz2-dev libc6-dev libdb-dev libexpat1-dev \
+    libffi-dev  libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev \
     libtinfo-dev zlib1g-dev libpcre++-dev vim less --no-install-recommends
 
 # Ensure that default language locale is set to a sane default of UTF-8.
@@ -73,7 +73,9 @@ test ! -z "$APACHE_VERSION" || exit 1
 
 test ! -z "$MOD_WSGI_VERSION" || exit 1
 
-# Download source code for Python and Apache, then unpack them.
+test ! -z "$NSS_WRAPPER_VERSION" || exit 1
+
+# Download source code for packages and unpack them.
 
 curl -SL -o $BUILD_ROOT/python.tar.gz https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
 
@@ -104,6 +106,12 @@ curl -SL -o $BUILD_ROOT/apache.tar.gz http://mirror.ventraip.net.au/apache/httpd
 mkdir $BUILD_ROOT/apache
 
 tar -xC $BUILD_ROOT/apache --strip-components=1 -f $BUILD_ROOT/apache.tar.gz
+
+curl -SL -o $BUILD_ROOT/nss_wrapper.tar.gz https://ftp.samba.org/pub/cwrap/nss_wrapper-$NSS_WRAPPER_VERSION.tar.gz
+
+mkdir $BUILD_ROOT/nss_wrapper
+
+tar -xC $BUILD_ROOT/nss_wrapper --strip-components=1 -f $BUILD_ROOT/nss_wrapper.tar.gz
 
 # To be safe, force the C compiler to be used to be the 64 bit compiler.
 
@@ -189,13 +197,39 @@ cd $BUILD_ROOT/apache
 make
 make install
 
+# Because the recommendation is that the derived Docker image should run
+# as a non root user, we enable the ability for Apache 'httpd'  when run
+# as a non root user to bind privileged ports normally used by system
+# services. This allows it to use port 80 and 443 as would normally be
+# used for HTTP/HTTPS. Allowing use of 80/443 can avoid problems with
+# some web applications that don't calculate properly what the web
+# services public port is and instead wrongly use the ports that the
+# Docker container exposes it as, which can be something different when
+# a front end proxy or router is used.
+
+setcap 'cap_net_bind_service=+ep' $INSTALL_ROOT/apache/bin/httpd
+
+# Build nss_wrapper package for use in returning proper user/group
+# details if container run under random uid/gid.
+
+cd $BUILD_ROOT/nss_wrapper
+
+mkdir obj
+cd obj
+
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_ROOT/nss_wrapper -DLIB_SUFFIX=64 ..
+
+make
+make install
+
 # Set PATH to include bin directories for Python and Apache.
 
 PATH=$INSTALL_ROOT/python/bin:$INSTALL_ROOT/apache/bin:$PATH
 export PATH
 
 # Install additional common Python packages we want installed. This
-# includes installing mod_wsgi-express.
+# includes installing mod_wsgi-express. We always attempt to force
+# installation of the latest version of pip.
 
 curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python
 
@@ -227,6 +261,27 @@ rm -rf $BUILD_ROOT
 
 rm -r /var/lib/apt/lists/*
 
-# Create empty directory to be used as the application directory.
+# Create empty directory for home directory of www-data user.
+
+mkdir -p /var/www
+chown www-data:www-data /var/www
+
+# Create empty directory to be used as application directory.
 
 mkdir -p /app
+
+# Create empty directory to be used as the data directory. Ensure it is
+# world writable but also has the sticky bit so only root or the owner
+# can unlink any files. Needs to be world writable as we cannot be
+# certain what uid application will run as.
+
+mkdir -p /data
+chmod 1777 /data
+
+# Create empty directory to be used as the runtime config directory.
+# Ensure it is world writable but also has the sticky bit so only root
+# or the owner can unlink any files. Needs to be world writable as we
+# cannot be certain what uid application will run as.
+
+mkdir -p /.whiskey
+chmod 1777 /.whiskey

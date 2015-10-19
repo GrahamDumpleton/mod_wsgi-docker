@@ -59,16 +59,7 @@ require a non root user from the outset.
 If this is the case, you can use::
 
     FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
-    USER $MOD_WSGI_USER_ID
-    CMD [ "hello.wsgi" ]
-
-In the case where the environment is interogating the Docker image before
-even running it, doesn't resolve the environment variable correctly when
-applying conditional checks, and expects to see an integer UID, then you
-should instead use::
-
-    FROM grahamdumpleton/mod-wsgi-docker:python-2.7-onbuild
-    USER 33
+    USER $MOD_WSGI_USER:$MOD_WSGI_GROUP
     CMD [ "hello.wsgi" ]
 
 For additional examples see the 'demos' sub directory.

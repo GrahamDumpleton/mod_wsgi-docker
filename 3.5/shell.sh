@@ -19,17 +19,50 @@ export WHISKEY_RUNTIME
 WHISKEY_HOMEDIR=/app
 export WHISKEY_HOMEDIR
 
-# Set up the system and bin directory where our scripts will be.
+# Set up the data directory for the application.
 
-WHISKEY_SYSDIR=/.whiskey
-export WHISKEY_SYSDIR
+WHISKEY_DATADIR=/data
+export WHISKEY_DATADIR
 
-WHISKEY_BINDIR=$WHISKEY_SYSDIR/python/bin
-export WHISKEY_BINDIR
+# Set up the system directory where we keep runtime files.
+
+WHISKEY_CONFDIR=/.whiskey
+export WHISKEY_CONFDIR
 
 # Make sure we are in the correct working directory for the application.
 
 cd $WHISKEY_HOMEDIR
+
+# Override uid and gid lookup to cope with being randomly assigned IDs
+# using the -u option to 'docker run'.
+
+WHISKEY_USER_ID=$(id -u)
+WHISKEY_GROUP_ID=$(id -g)
+
+NSS_WRAPPER_PASSWD=$WHISKEY_CONFDIR/passwd
+export NSS_WRAPPER_PASSWD
+
+cat /etc/passwd > $NSS_WRAPPER_PASSWD
+
+if [ x"$WHISKEY_USER_ID" != x"0" ]; then
+    echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
+else
+    NSS_WRAPPER_PASSWD=/etc/passwd
+fi
+
+NSS_WRAPPER_GROUP=$WHISKEY_CONFDIR/group
+export NSS_WRAPPER_GROUP
+
+cat /etc/group > $NSS_WRAPPER_GROUP
+
+if [ x"$WHISKEY_GROUP_ID" != x"0" ]; then
+    echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
+else
+    NSS_WRAPPER_GROUP=/etc/group
+fi
+
+LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
+export LD_PRELOAD
 
 # Docker will have set any environment variables defined in the image or
 # on the command line when the container has been run. Here we are going
