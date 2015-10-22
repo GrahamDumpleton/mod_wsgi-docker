@@ -93,7 +93,9 @@ source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 mkdir -p $WHISKEY_ENVDIR
 
 if [ -d .whiskey/user_vars ]; then
-    cp .whiskey/user_vars/* $WHISKEY_ENVDIR/
+    for name in `ls .whiskey/user_vars/*`; do
+        cp $name $WHISKEY_ENVDIR
+    done
 fi
 
 # Docker will have set any environment variables defined in the image or
