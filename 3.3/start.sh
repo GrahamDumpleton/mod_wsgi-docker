@@ -78,6 +78,10 @@ fi
 LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
 export LD_PRELOAD
 
+# Activate the Python virtual environment.
+
+source $WHISKEY_CONFDIR/virtualenv/bin/activate
+
 # Docker will have set any environment variables defined in the image or
 # on the command line when the container has been run. Here we are going
 # to look for any statically defined environment variables provided by

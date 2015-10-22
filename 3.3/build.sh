@@ -76,6 +76,26 @@ else
     test ! -d .whiskey/user_vars && mkdir -p .whiskey/user_vars
 fi
 
+# Create a Python virtual environment into which any Python packages
+# required by the user will actually be installed. It is done at this
+# point as privileges may have been dropped by this point and so may
+# not have write access to the original Python installation.
+#
+# We need to reinstall mod_wsgi-express at this point as it was
+# originally installed into the main Python installation, but those
+# packages will now be ignored.
+#
+# Once again we force update of pip in case the version bundled with
+# the virtualenv package is not the latest.
+
+virtualenv $WHISKEY_CONFDIR/virtualenv
+
+source $WHISKEY_CONFDIR/virtualenv/bin/activate
+
+pip install --no-cache-dir -U pip
+
+pip install --no-cache-dir -U mod_wsgi==$MOD_WSGI_VERSION
+
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
 # installed that may be required by any Python modules which are being

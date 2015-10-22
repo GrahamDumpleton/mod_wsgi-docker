@@ -227,9 +227,13 @@ make install
 PATH=$INSTALL_ROOT/python/bin:$INSTALL_ROOT/apache/bin:$PATH
 export PATH
 
-# Install additional common Python packages we want installed. This
-# includes installing mod_wsgi-express. We always attempt to force
-# installation of the latest version of pip.
+# Install additional common Python packages we want installed. We always
+# attempt to force installation of the latest version of pip.
+#
+# Note that this includes installing mod_wsgi-express as a fallback in
+# case someone expects it to be available as part of the base image. We
+# install it again as part of the build, in that case as part of the
+# Python virtual environment that is created.
 
 curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python
 
@@ -240,6 +244,7 @@ if test ! -f $INSTALL_ROOT/python/bin/pip; then
 fi
 
 pip install --no-cache-dir virtualenv
+
 pip install --no-cache-dir -U pip
 
 pip install --no-cache-dir -U mod_wsgi==$MOD_WSGI_VERSION
