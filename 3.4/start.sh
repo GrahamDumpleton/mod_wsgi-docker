@@ -259,11 +259,6 @@ if test x"$MOD_WSGI_ENABLE_DEBUGGER" != x""; then
     SERVER_ARGS="$SERVER_ARGS --debug-mode --enable-debugger"
 fi
 
-if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
-        x"$NEW_RELIC_CONFIG_FILE" != x""; then
-    SERVER_ARGS="$SERVER_ARGS --with-newrelic"
-fi
-
 if test x"$MOD_WSGI_WORKING_DIRECTORY" != x""; then
     SERVER_ARGS="$SERVER_ARGS --working-directory $MOD_WSGI_WORKING_DIRECTORY"
 fi
@@ -274,6 +269,11 @@ fi
 
 if test x"$MOD_WSGI_ENTRY_POINT" != x""; then
     SERVER_ARGS="$SERVER_ARGS --entry-point $MOD_WSGI_ENTRY_POINT"
+fi
+
+if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
+        x"$NEW_RELIC_CONFIG_FILE" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --with-newrelic"
 fi
 
 if [ -f .whiskey/server_args ]; then
