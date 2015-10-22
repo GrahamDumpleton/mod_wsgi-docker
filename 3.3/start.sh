@@ -141,6 +141,11 @@ fi
 # in the foreground, replacing this process and adopting process ID 1 so
 # that signals are received properly and Apache will shutdown properly
 # when the container is being stopped. It will log to stdout/stderr.
+#
+# In running the mod_wsgi-express command, we collect select override
+# arguments from the environment. We also allow extra server arguments
+# in the file '.whiskey/server_args', plus allow the whole command to be
+# overridden using '.whiskey/action_hooks/start'.
 
 SERVER_ARGS="--log-to-terminal --startup-log --port 80"
 
@@ -249,4 +254,25 @@ if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
     SERVER_ARGS="$SERVER_ARGS --with-newrelic"
 fi
 
-exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
+if test x"$MOD_WSGI_WORKING_DIRECTORY" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --working-directory $MOD_WSGI_WORKING_DIRECTORY"
+fi
+
+if test x"$MOD_WSGI_APPLICATION_TYPE" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --application-type $MOD_WSGI_APPLICATION_TYPE"
+fi
+
+if test x"$MOD_WSGI_APPLICATION" != x""; then
+    SERVER_ARGS="$SERVER_ARGS $MOD_WSGI_APPLICATION"
+fi
+
+if [ -f .whiskey/server_args ]; then
+    SERVER_ARGS="$SERVER_ARGS `cat .whiskey/server_args`"
+fi
+
+if [ -x .whiskey/action_hooks/start ]; then
+    echo " -----> Running .whiskey/action_hooks/start"
+    exec .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
+else
+    exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
+fi
