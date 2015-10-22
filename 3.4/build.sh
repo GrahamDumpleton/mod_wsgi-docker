@@ -58,22 +58,20 @@ export WHISKEY_TEMPDIR
 
 cd $WHISKEY_HOMEDIR
 
-# Create the '.whiskey/user_vars' directory for storage of user defined
-# environment variables if it doesn't already exist. These can be
-# created by the user from any hook script. The name of the file
-# corresponds to the name of the environment variable and the contents
-# of the file the value to set the environment variable to.
+# Check for the existence of the '.whiskey/user_vars' directory for
+# storage of user defined environment variables. These can be created by
+# the user from any hook script. The name of the file corresponds to the
+# name of the environment variable and the contents of the file the
+# value to set the environment variable to.
 #
-# Note that because the path to the user_vars directory was changed, we
-# need to warn about old deprecated name. In case that the user is using
-# old name, just symlink the new location to the old.
+# Because the path to the user_vars directory was changed, we need to
+# warn about the old deprecated name. In case that the user is using old
+# name, just symlink the new location to the old.
 
 if test -d .docker/user_vars; then
     echo " -----> Linking deprecated .docker/user_vars"
     echo "WARNING: Use directory .whiskey/user_vars instead."
     ln -s $WHISKEY_HOMEDIR/.docker/user_vars .whiskey/user_vars
-else
-    test ! -d .whiskey/user_vars && mkdir -p .whiskey/user_vars
 fi
 
 # Create a Python virtual environment into which any Python packages
