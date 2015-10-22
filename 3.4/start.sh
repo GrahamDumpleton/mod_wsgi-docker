@@ -38,6 +38,12 @@ export WHISKEY_TEMPDIR
 WHISKEY_ENVDIR=/.whiskey/user_vars
 export WHISKEY_ENVDIR
 
+# Override the HOME directory for the user in case it isn't set to
+# sensible value.
+
+HOME=/var/www
+export HOME
+
 # Make sure we are in the correct working directory for the application.
 
 cd $WHISKEY_HOMEDIR
