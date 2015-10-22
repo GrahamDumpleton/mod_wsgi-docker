@@ -29,8 +29,8 @@ export WHISKEY_DATADIR
 
 # Set up the system directory where we keep runtime files.
 
-WHISKEY_CONFDIR=/.whiskey
-export WHISKEY_CONFDIR
+WHISKEY_TEMPDIR=/.whiskey
+export WHISKEY_TEMPDIR
 
 # Set up the user_vars directory where environment variable updates
 # can be done.
@@ -53,7 +53,7 @@ cd $WHISKEY_HOMEDIR
 WHISKEY_USER_ID=$(id -u)
 WHISKEY_GROUP_ID=$(id -g)
 
-NSS_WRAPPER_PASSWD=$WHISKEY_CONFDIR/passwd
+NSS_WRAPPER_PASSWD=$WHISKEY_TEMPDIR/passwd
 export NSS_WRAPPER_PASSWD
 
 cat /etc/passwd > $NSS_WRAPPER_PASSWD
@@ -64,7 +64,7 @@ else
     NSS_WRAPPER_PASSWD=/etc/passwd
 fi
 
-NSS_WRAPPER_GROUP=$WHISKEY_CONFDIR/group
+NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
 export NSS_WRAPPER_GROUP
 
 cat /etc/group > $NSS_WRAPPER_GROUP
@@ -80,7 +80,7 @@ export LD_PRELOAD
 
 # Activate the Python virtual environment.
 
-source $WHISKEY_CONFDIR/virtualenv/bin/activate
+source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
 # Docker will have set any environment variables defined in the image or
 # on the command line when the container has been run. Here we are going

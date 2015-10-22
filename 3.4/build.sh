@@ -51,8 +51,8 @@ export WHISKEY_DATADIR
 
 # Set up the system directory where we keep runtime files.
 
-WHISKEY_CONFDIR=/.whiskey
-export WHISKEY_CONFDIR
+WHISKEY_TEMPDIR=/.whiskey
+export WHISKEY_TEMPDIR
 
 # Make sure we are in the correct working directory for the application.
 
@@ -88,9 +88,9 @@ fi
 # Once again we force update of pip in case the version bundled with
 # the virtualenv package is not the latest.
 
-virtualenv $WHISKEY_CONFDIR/virtualenv
+virtualenv $WHISKEY_TEMPDIR/virtualenv
 
-source $WHISKEY_CONFDIR/virtualenv/bin/activate
+source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
 pip install --no-cache-dir -U pip
 
