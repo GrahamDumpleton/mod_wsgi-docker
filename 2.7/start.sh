@@ -272,8 +272,8 @@ if test x"$MOD_WSGI_APPLICATION_TYPE" != x""; then
     SERVER_ARGS="$SERVER_ARGS --application-type $MOD_WSGI_APPLICATION_TYPE"
 fi
 
-if test x"$MOD_WSGI_APPLICATION" != x""; then
-    SERVER_ARGS="$SERVER_ARGS $MOD_WSGI_APPLICATION"
+if test x"$MOD_WSGI_ENTRY_POINT" != x""; then
+    SERVER_ARGS="$SERVER_ARGS --entry-point $MOD_WSGI_ENTRY_POINT"
 fi
 
 if [ -f .whiskey/server_args ]; then
