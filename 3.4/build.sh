@@ -88,11 +88,17 @@ fi
 # Once again we force update of pip in case the version bundled with
 # the virtualenv package is not the latest.
 
+echo " -----> Creating Python virtual environment"
+
 virtualenv $WHISKEY_TEMPDIR/virtualenv
 
 source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
+echo " -----> Updating pip to latest version"
+
 pip install --no-cache-dir -U pip
+
+echo " -----> Installing mod_wsgi-express"
 
 pip install --no-cache-dir -U mod_wsgi==$MOD_WSGI_VERSION
 
