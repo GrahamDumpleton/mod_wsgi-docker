@@ -5,7 +5,7 @@ ENV PYTHON_VERSION=3.3.6 \
     APR_VERSION=1.5.2 \
     APR_UTIL_VERSION=1.5.4 \
     APACHE_VERSION=2.4.17 \
-    MOD_WSGI_VERSION=4.4.20 \
+    MOD_WSGI_VERSION=4.4.21 \
     NSS_WRAPPER_VERSION=1.0.3
 
 COPY setup.sh /usr/local/bin/mod_wsgi-docker-setup
