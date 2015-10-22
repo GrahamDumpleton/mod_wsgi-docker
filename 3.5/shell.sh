@@ -29,6 +29,12 @@ export WHISKEY_DATADIR
 WHISKEY_TEMPDIR=/.whiskey
 export WHISKEY_TEMPDIR
 
+# Set up the user_vars directory where environment variable updates
+# can be done.
+
+WHISKEY_ENVDIR=/.whiskey/user_vars
+export WHISKEY_ENVDIR
+
 # Make sure we are in the correct working directory for the application.
 
 cd $WHISKEY_HOMEDIR
@@ -68,6 +74,19 @@ export LD_PRELOAD
 
 source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
+# Copy environment variable configuration to the system directory used
+# for runtime files. This is done so that the '.whiskey/deploy-env' can
+# safely add or remove files without modifying the original source code
+# directory. This is necessary as the original source code directory
+# may not be writable, or could be a mounted directory and we do not
+# want to modify any original outside of Docker.
+
+mkdir -p $WHISKEY_ENVDIR
+
+if [ -d .whiskey/user_vars ]; then
+    cp .whiskey/user_vars/* $WHISKEY_ENVDIR/
+fi
+
 # Docker will have set any environment variables defined in the image or
 # on the command line when the container has been run. Here we are going
 # to look for any statically defined environment variables provided by
@@ -79,12 +98,10 @@ source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
 envvars=
 
-if [ -d .whiskey/user_vars ]; then
-    for name in `ls .whiskey/user_vars`; do
-        export $name=`cat .whiskey/user_vars/$name`
-        envvars="$envvars $name"
-    done
-fi
+for name in `ls $WHISKEY_ENVDIR`; do
+    export $name=`cat $WHISKEY_ENVDIR/$name`
+    envvars="$envvars $name"
+done
 
 # Run any user supplied script to be run to set, modify or delete the
 # environment variables.
@@ -98,17 +115,15 @@ fi
 # changes. Unset any for which the environment variable file no longer
 # exists, albeit in practice that is probably unlikely.
 
-if [ -d .whiskey/user_vars ]; then
-    for name in `ls .whiskey/user_vars`; do
-        export $name=`cat .whiskey/user_vars/$name`
-    done
+for name in `ls $WHISKEY_ENVDIR`; do
+    export $name=`cat $WHISKEY_ENVDIR/$name`
+done
 
-    for name in $envvars; do
-        if test ! -f .whiskey/user_vars/$name; then
-            unset $name
-        fi
-    done
-fi
+for name in $envvars; do
+    if test ! -f $WHISKEY_ENVDIR/$name; then
+        unset $name
+    fi
+done
 
 # Now finally run bash.
 

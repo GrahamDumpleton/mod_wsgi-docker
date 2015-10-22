@@ -266,10 +266,14 @@ rm -rf $BUILD_ROOT
 
 rm -r /var/lib/apt/lists/*
 
-# Create empty directory for home directory of www-data user.
+# Create empty directory for home directory of www-data user. Ensure it is
+# world writable but also has the sticky bit so only root or the owner
+# can unlink any files. Needs to be world writable as we cannot be
+# certain what uid application will run as.
 
 mkdir -p /var/www
 chown www-data:www-data /var/www
+chmod 1777 /var/www
 
 # Create empty directory to be used as application directory.
 
@@ -283,7 +287,7 @@ mkdir -p /app
 mkdir -p /data
 chmod 1777 /data
 
-# Create empty directory to be used as the runtime config directory.
+# Create empty directory to be used as the temporary runtime directory.
 # Ensure it is world writable but also has the sticky bit so only root
 # or the owner can unlink any files. Needs to be world writable as we
 # cannot be certain what uid application will run as.

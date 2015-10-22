@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo VALUE4 > $WHISKEY_ENVDIR/NAME4
+
+rm $WHISKEY_ENVDIR/NAME1
