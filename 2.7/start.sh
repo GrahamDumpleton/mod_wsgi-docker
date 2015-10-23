@@ -54,6 +54,9 @@ cd $WHISKEY_HOMEDIR
 WHISKEY_USER_ID=$(id -u)
 WHISKEY_GROUP_ID=$(id -g)
 
+NSS_WRAPPER_PASSWD=$WHISKEY_TEMPDIR/passwd
+NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
+
 cat /etc/passwd > $NSS_WRAPPER_PASSWD
 cat /etc/group > $NSS_WRAPPER_GROUP
 
@@ -61,10 +64,7 @@ echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nolo
 echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
 
 if [ x"$WHISKEY_GROUP_ID" != x"0" ]; then 
-    NSS_WRAPPER_PASSWD=$WHISKEY_TEMPDIR/passwd
     export NSS_WRAPPER_PASSWD
-
-    NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
     export NSS_WRAPPER_GROUP
 
     LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
