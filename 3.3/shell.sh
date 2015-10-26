@@ -76,9 +76,15 @@ fi
 LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
 export LD_PRELOAD
 
-# Activate the Python virtual environment.
+# Activate the Python virtual environment if one exists. There will only
+# be one if the build phase was run. The build phase may not be run if
+# some one was using the base image directly to host static files or run
+# a minimal WSGI application that was mounted as a volume rather than
+# build their own image.
 
-source $WHISKEY_TEMPDIR/virtualenv/bin/activate
+if [ -f $WHISKEY_TEMPDIR/virtualenv/bin/activate ]; then
+    source $WHISKEY_TEMPDIR/virtualenv/bin/activate
+fi
 
 # Copy environment variable configuration to the system directory used
 # for runtime files. This is done so that the '.whiskey/deploy-env' can
