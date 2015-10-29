@@ -63,7 +63,7 @@ cat /etc/group > $NSS_WRAPPER_GROUP
 echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
 echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
 
-if [ x"$WHISKEY_GROUP_ID" != x"0" ]; then 
+if [ x"$WHISKEY_USER_ID" != x"0" ]; then 
     export NSS_WRAPPER_PASSWD
     export NSS_WRAPPER_GROUP
 

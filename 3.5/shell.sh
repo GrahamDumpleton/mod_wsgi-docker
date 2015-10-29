@@ -52,29 +52,21 @@ WHISKEY_USER_ID=$(id -u)
 WHISKEY_GROUP_ID=$(id -g)
 
 NSS_WRAPPER_PASSWD=$WHISKEY_TEMPDIR/passwd
-export NSS_WRAPPER_PASSWD
+NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
 
 cat /etc/passwd > $NSS_WRAPPER_PASSWD
-
-if [ x"$WHISKEY_USER_ID" != x"0" ]; then
-    echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
-else
-    NSS_WRAPPER_PASSWD=/etc/passwd
-fi
-
-NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
-export NSS_WRAPPER_GROUP
-
 cat /etc/group > $NSS_WRAPPER_GROUP
 
-if [ x"$WHISKEY_GROUP_ID" != x"0" ]; then
-    echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
-else
-    NSS_WRAPPER_GROUP=/etc/group
-fi
+echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
+echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
 
-LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
-export LD_PRELOAD
+if [ x"$WHISKEY_USER_ID" != x"0" ]; then
+    export NSS_WRAPPER_PASSWD
+    export NSS_WRAPPER_GROUP
+
+    LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
+    export LD_PRELOAD
+fi
 
 # Activate the Python virtual environment if one exists. There will only
 # be one if the build phase was run. The build phase may not be run if
