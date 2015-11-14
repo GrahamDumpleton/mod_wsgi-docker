@@ -113,6 +113,12 @@ mkdir $BUILD_ROOT/nss_wrapper
 
 tar -xC $BUILD_ROOT/nss_wrapper --strip-components=1 -f $BUILD_ROOT/nss_wrapper.tar.gz
 
+curl -SL -o $BUILD_ROOT/tini.tar.gz https://github.com/krallin/tini/archive/v$TINI_VERSION.tar.gz
+
+mkdir $BUILD_ROOT/tini
+
+tar -xC $BUILD_ROOT/tini --strip-components=1 -f $BUILD_ROOT/tini.tar.gz
+
 # To be safe, force the C compiler to be used to be the 64 bit compiler.
 
 CC=x86_64-linux-gnu-gcc
@@ -220,6 +226,16 @@ cd obj
 cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_ROOT/nss_wrapper -DLIB_SUFFIX=64 ..
 
 make
+make install
+
+# Build tini package for use as a minimal init process to ensure
+# correct reaping of zombie processes.
+
+cd $BUILD_ROOT/tini
+
+cmake .
+
+make CFLAGS="-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37" .
 make install
 
 # Set PATH to include bin directories for Python and Apache.

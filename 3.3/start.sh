@@ -282,7 +282,7 @@ fi
 
 if [ -x .whiskey/action_hooks/start ]; then
     echo " -----> Running .whiskey/action_hooks/start"
-    exec .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
+    exec tini -- .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
 else
-    exec mod_wsgi-express start-server ${SERVER_ARGS} "$@"
+    exec tini -- mod_wsgi-express start-server ${SERVER_ARGS} "$@"
 fi
