@@ -37,7 +37,7 @@ apt-get update
 # are needed based on users code, such as database clients, they should
 # be installed by the user from the build hooks.
 
-apt-get install -y ca-certificates locales curl gcc file make cmake \
+apt-get install -y ca-certificates locales curl gcc g++ file make cmake \
     xz-utils mime-support libbz2-dev libc6-dev libdb-dev libexpat1-dev \
     libffi-dev  libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev \
     libtinfo-dev zlib1g-dev libpcre++-dev vim less --no-install-recommends
