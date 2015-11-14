@@ -79,26 +79,18 @@ fi
 # point as privileges may have been dropped by this point and so may
 # not have write access to the original Python installation.
 #
-# We need to reinstall mod_wsgi-express at this point as it was
-# originally installed into the main Python installation, but those
-# packages will now be ignored.
-#
 # Once again we force update of pip in case the version bundled with
 # the virtualenv package is not the latest.
 
 echo " -----> Creating Python virtual environment"
 
-virtualenv $WHISKEY_TEMPDIR/virtualenv
+virtualenv $WHISKEY_TEMPDIR/virtualenv --system-site-packages
 
 source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 
 echo " -----> Updating pip to latest version"
 
 pip install --no-cache-dir -U pip
-
-echo " -----> Installing mod_wsgi-express"
-
-pip install --no-cache-dir -U mod_wsgi==$MOD_WSGI_VERSION
 
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
