@@ -17,6 +17,19 @@ COPY build.sh /usr/local/bin/mod_wsgi-docker-build
 COPY start.sh /usr/local/bin/mod_wsgi-docker-start
 COPY shell.sh /usr/local/bin/mod_wsgi-docker-shell
 
+COPY assemble.sh /usr/local/s2i/bin/assemble
+
+RUN cd /usr/local/s2i/bin; ln -s assemble save-artifacts; \
+    ln -s assemble run; ln -s assemble usage
+
+LABEL io.k8s.description="Builder for Python web applications." \
+      io.k8s.display-name="Apache/mod_wsgi (Python 2.7)" \
+      io.openshift.expose-services="80:http" \
+      io.openshift.tags="builder,mod_wsgi,python-2.7,mod_wsgi-python-2.7" \
+      io.openshift.s2i.scripts-url="image:///usr/local/s2i/bin"
+
+ENV STI_SCRIPTS_PATH=/usr/local/s2i/bin
+
 ENV LANG=en_US.UTF-8 PYTHONHASHSEED=random \
     PATH=/usr/local/python/bin:/usr/local/apache/bin:$PATH
 
