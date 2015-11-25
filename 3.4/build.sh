@@ -92,6 +92,10 @@ echo " -----> Updating pip to latest version"
 
 pip install --no-cache-dir -U pip
 
+echo " -----> Installing mod_wsgi-express"
+
+pip install --no-cache-dir -I mod_wsgi==$MOD_WSGI_VERSION
+
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
 # installed that may be required by any Python modules which are being
