@@ -25,24 +25,6 @@ set -x
 
 set -eo pipefail
 
-# Ensure we have an up to date package index.
-
-rm -r /var/lib/apt/lists/* 
-
-apt-get update
-
-# Install all the dependencies that we need in order to be able to build
-# both Python and Apache from source code, and then build additional
-# modules for each. This is still a slim install. If additional packages
-# are needed based on users code, such as database clients, they should
-# be installed by the user from the build hooks.
-
-apt-get install -y ca-certificates locales curl gcc g++ file make cmake \
-    xz-utils mime-support libbz2-dev libc6-dev libdb-dev libexpat1-dev \
-    libffi-dev  libncursesw5-dev libreadline-dev libsqlite3-dev libssl-dev \
-    libtinfo-dev zlib1g-dev libpcre++-dev pkg-config vim less \
-    --no-install-recommends
-
 # Ensure that default language locale is set to a sane default of UTF-8.
 
 echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen
@@ -51,6 +33,20 @@ locale-gen
 
 LANG=en_US.UTF-8
 export LANG
+
+# Create a special user account under which any application should be
+# run. This has group of 'root' with gid of '0' as it appears to be
+# safest bet to allow file system permisions for everything to work.
+
+adduser --disabled-password --gecos "Whiskey" --uid 1001 --gid 0 \
+    --home /home/whiskey whiskey
+
+# Set the umask to be '002' so that any files/directories created from
+# this point are group writable. This does rely on any applications or
+# installation scripts honouring the umask setting, which unfortunately
+# not all do.
+
+umask 002
 
 # Set up the directory where Python and Apache installations will be put.
 
@@ -204,18 +200,6 @@ cd $BUILD_ROOT/apache
 make
 make install
 
-# Because the recommendation is that the derived Docker image should run
-# as a non root user, we enable the ability for Apache 'httpd'  when run
-# as a non root user to bind privileged ports normally used by system
-# services. This allows it to use port 80 and 443 as would normally be
-# used for HTTP/HTTPS. Allowing use of 80/443 can avoid problems with
-# some web applications that don't calculate properly what the web
-# services public port is and instead wrongly use the ports that the
-# Docker container exposes it as, which can be something different when
-# a front end proxy or router is used.
-
-setcap 'cap_net_bind_service=+ep' $INSTALL_ROOT/apache/bin/httpd
-
 # Build nss_wrapper package for use in returning proper user/group
 # details if container run under random uid/gid.
 
@@ -244,13 +228,9 @@ make install
 PATH=$INSTALL_ROOT/python/bin:$INSTALL_ROOT/apache/bin:$PATH
 export PATH
 
-# Install additional common Python packages we want installed. We always
-# attempt to force installation of the latest version of pip.
-#
-# Note that this includes installing mod_wsgi-express as a fallback in
-# case someone expects it to be available as part of the base image. We
-# install it again as part of the build, in that case as part of the
-# Python virtual environment that is created.
+# Install additional common Python packages we want installed. This
+# includes installing mod_wsgi-express as a fallback in case someone
+# expects it to be available as part of the base image.
 
 curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python
 
@@ -259,10 +239,6 @@ if test ! -f $INSTALL_ROOT/python/bin/pip; then
         ln -s pip3 $INSTALL_ROOT/python/bin/pip
     fi
 fi
-
-pip install --no-cache-dir virtualenv
-
-pip install --no-cache-dir -U pip
 
 pip install --no-cache-dir -U mod_wsgi==$MOD_WSGI_VERSION
 
@@ -275,26 +251,42 @@ find $INSTALL_ROOT/python/lib \
 
 rm -rf $INSTALL_ROOT/apache/manual
 
-# Clean up the temporary build area.
+# Fixup group ownership and directory/file permissions for installation
+# area so group writable by 'root'.
 
-rm -rf $BUILD_ROOT
+chgrp -R root $INSTALL_ROOT
 
-# Clean up the package index.
+find $INSTALL_ROOT -type d -exec chmod g+ws {} \;
 
-rm -r /var/lib/apt/lists/*
+find $INSTALL_ROOT -perm 2755 -exec chmod g+w {} \;
+find $INSTALL_ROOT -perm 0644 -exec chmod g+w {} \;
 
-# Create empty directory for home directory of www-data user. Ensure it is
-# world writable but also has the sticky bit so only root or the owner
-# can unlink any files. Needs to be world writable as we cannot be
+# Because the recommendation is that the derived Docker image should run
+# as a non root user, we enable the ability for Apache 'httpd'  when run
+# as a non root user to bind privileged ports normally used by system
+# services. This allows it to use port 80 and 443 as would normally be
+# used for HTTP/HTTPS. Allowing use of 80/443 can avoid problems with
+# some web applications that don't calculate properly what the web
+# services public port is and instead wrongly use the ports that the
+# Docker container exposes it as, which can be something different when
+# a front end proxy or router is used.
+
+setcap 'cap_net_bind_service=+ep' $INSTALL_ROOT/apache/bin/httpd
+
+# Ensure home directory for 'whiskey' user is world writable but also
+# has the sticky bit so only 'root' or the owner can unlink any files.
+# Needs to be world writable as we cannot be certain what uid the
+# application will run as.
+
+chmod 1777 /home/whiskey
+
+# Create empty directory to be used as application directory. Ensure it
+# is world writable but also has the sticky bit so only root or the
+# owner can unlink any files. Needs to be world writable as we cannot be
 # certain what uid application will run as.
 
-mkdir -p /var/www
-chown www-data:www-data /var/www
-chmod 1777 /var/www
-
-# Create empty directory to be used as application directory.
-
 mkdir -p /app
+chmod 1777 /app
 
 # Create empty directory to be used as the data directory. Ensure it is
 # world writable but also has the sticky bit so only root or the owner
@@ -304,10 +296,6 @@ mkdir -p /app
 mkdir -p /data
 chmod 1777 /data
 
-# Create empty directory to be used as the temporary runtime directory.
-# Ensure it is world writable but also has the sticky bit so only root
-# or the owner can unlink any files. Needs to be world writable as we
-# cannot be certain what uid application will run as.
+# Clean up the temporary build area.
 
-mkdir -p /.whiskey
-chmod 1777 /.whiskey
+rm -rf $BUILD_ROOT

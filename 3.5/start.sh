@@ -29,24 +29,30 @@ export WHISKEY_DATADIR
 
 # Set up the system directory where we keep runtime files.
 
-WHISKEY_TEMPDIR=/.whiskey
+WHISKEY_TEMPDIR=/home/whiskey
 export WHISKEY_TEMPDIR
 
 # Set up the user_vars directory where environment variable updates
 # can be done.
 
-WHISKEY_ENVDIR=/.whiskey/user_vars
+WHISKEY_ENVDIR=/home/whiskey/user_vars
 export WHISKEY_ENVDIR
 
 # Override the HOME directory for the user in case it isn't set to
 # sensible value.
 
-HOME=/var/www
+HOME=/home/whiskey
 export HOME
 
 # Make sure we are in the correct working directory for the application.
 
 cd $WHISKEY_HOMEDIR
+
+# Set the umask to be '002' so that any files/directories created from
+# this point are group writable. This does rely on any applications or
+# installation scripts honouring the umask setting.
+
+umask 002
 
 # Override uid and gid lookup to cope with being randomly assigned IDs
 # using the -u option to 'docker run'.
@@ -60,8 +66,8 @@ NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
 cat /etc/passwd > $NSS_WRAPPER_PASSWD
 cat /etc/group > $NSS_WRAPPER_GROUP
 
-echo "www-user:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:www-user:/var/www:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
-echo "www-user:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
+echo "yeksihw:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:Whiskey,,,:/home/whiskey:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
+echo "yeksihw:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
 
 if [ x"$WHISKEY_USER_ID" != x"0" ]; then 
     export NSS_WRAPPER_PASSWD
@@ -69,16 +75,6 @@ if [ x"$WHISKEY_USER_ID" != x"0" ]; then
 
     LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
     export LD_PRELOAD
-fi
-
-# Activate the Python virtual environment if one exists. There will only
-# be one if the build phase was run. The build phase may not be run if
-# some one was using the base image directly to host static files or run
-# a minimal WSGI application that was mounted as a volume rather than
-# build their own image.
-
-if [ -f $WHISKEY_TEMPDIR/virtualenv/bin/activate ]; then
-    source $WHISKEY_TEMPDIR/virtualenv/bin/activate
 fi
 
 # Copy environment variable configuration to the system directory used

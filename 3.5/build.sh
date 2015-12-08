@@ -51,12 +51,18 @@ export WHISKEY_DATADIR
 
 # Set up the system directory where we keep runtime files.
 
-WHISKEY_TEMPDIR=/.whiskey
+WHISKEY_TEMPDIR=/home/whiskey
 export WHISKEY_TEMPDIR
 
 # Make sure we are in the correct working directory for the application.
 
 cd $WHISKEY_HOMEDIR
+
+# Set the umask to be '002' so that any files/directories created from
+# this point are group writable. This does rely on any applications or
+# installation scripts honouring the umask setting.
+
+umask 002
 
 # Check for the existence of the '.whiskey/user_vars' directory for
 # storage of user defined environment variables. These can be created by
@@ -73,28 +79,6 @@ if test -d .docker/user_vars; then
     echo "WARNING: Use directory .whiskey/user_vars instead."
     ln -s $WHISKEY_HOMEDIR/.docker/user_vars .whiskey/user_vars
 fi
-
-# Create a Python virtual environment into which any Python packages
-# required by the user will actually be installed. It is done at this
-# point as privileges may have been dropped by this point and so may
-# not have write access to the original Python installation.
-#
-# Once again we force update of pip in case the version bundled with
-# the virtualenv package is not the latest.
-
-echo " -----> Creating Python virtual environment"
-
-virtualenv $WHISKEY_TEMPDIR/virtualenv --system-site-packages
-
-source $WHISKEY_TEMPDIR/virtualenv/bin/activate
-
-echo " -----> Updating pip to latest version"
-
-pip install --no-cache-dir -U pip
-
-echo " -----> Installing mod_wsgi-express"
-
-pip install --no-cache-dir -I mod_wsgi==$MOD_WSGI_VERSION
 
 # Run any user supplied script to be run prior to installing application
 # dependencies. This is to allow additional system packages to be
@@ -120,19 +104,6 @@ fi
 if [ -x .whiskey/action_hooks/pre-build ]; then
     echo " -----> Running .whiskey/action_hooks/pre-build"
     .whiskey/action_hooks/pre-build
-fi
-
-# Check whether there are any git repositories referenced from the
-# 'requirements.txt file. If there are then we need to first explicitly
-# install git and only then run 'pip'.
-
-if [ -f requirements.txt ]; then
-    if (grep -Fiq "git+" requirements.txt); then
-        echo " -----> Installing git"
-        apt-get update && \
-            apt-get install -y git --no-install-recommends && \
-            rm -r /var/lib/apt/lists/*
-    fi
 fi
 
 # Check to see if a 'wheelhouse' directory has been provided from which
