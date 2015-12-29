@@ -127,6 +127,6 @@ done
 # Finally set an environment variable as marker to indicate that the
 # environment has been set up.
 
-WHISKEY_PHASE=enter
+WHISKEY_PHASE=environ
 export WHISKEY_PHASE
 

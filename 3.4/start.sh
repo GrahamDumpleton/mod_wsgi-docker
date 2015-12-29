@@ -164,9 +164,13 @@ if [ -f .whiskey/server_args ]; then
     SERVER_ARGS="$SERVER_ARGS `cat .whiskey/server_args`"
 fi
 
+if [ x"$WHISKEY_PHASE" != x"entrypoint" ]; then
+    TINI="tini --"
+fi
+
 if [ -x .whiskey/action_hooks/start ]; then
     echo " -----> Running .whiskey/action_hooks/start"
-    exec tini -- .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
+    exec $TINI .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
 else
-    exec tini -- mod_wsgi-express start-server ${SERVER_ARGS} "$@"
+    exec $TINI mod_wsgi-express start-server ${SERVER_ARGS} "$@"
 fi

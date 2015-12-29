@@ -15,6 +15,12 @@ if [ x"$WHISKEY_PHASE" = x"" ]; then
     . `which mod_wsgi-docker-environ`
 fi
 
-# Now finally run bash.
+# Finally set an environment variable as marker to indicate that the
+# environment has been set up.
 
-exec "$@"
+WHISKEY_PHASE=entrypoint
+export WHISKEY_PHASE
+
+# Now execute the command passed as arguments.
+
+exec tini -- "$@"
