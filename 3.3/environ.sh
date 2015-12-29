@@ -55,20 +55,17 @@ umask 002
 # using the -u option to 'docker run'.
 
 WHISKEY_USER_ID=$(id -u)
-WHISKEY_GROUP_ID=$(id -g)
 
 NSS_WRAPPER_PASSWD=$WHISKEY_TEMPDIR/passwd
-NSS_WRAPPER_GROUP=$WHISKEY_TEMPDIR/group
+NSS_WRAPPER_GROUP=/etc/group
 
-cat /etc/passwd > $NSS_WRAPPER_PASSWD
-cat /etc/group > $NSS_WRAPPER_GROUP
-
-echo "yeksihw:x:$WHISKEY_USER_ID:$WHISKEY_GROUP_ID:Whiskey,,,:/home/whiskey:/sbin/nologin" >> $NSS_WRAPPER_PASSWD
-echo "yeksihw:x:$WHISKEY_GROUP_ID:" >> $NSS_WRAPPER_GROUP
-
-if [ x"$WHISKEY_USER_ID" != x"0" ]; then
+if [ x"$WHISKEY_USER_ID" != x"0" -a x"$WHISKEY_USER_ID" != x"1001" ]; then
     export NSS_WRAPPER_PASSWD
     export NSS_WRAPPER_GROUP
+
+    cat /etc/passwd | sed -e 's/^whiskey:/yeksihw:/' > $NSS_WRAPPER_PASSWD
+
+    echo "whiskey:x:$WHISKEY_USER_ID:0:Whiskey,,,:/home/whiskey:/bin/bash" >> $NSS_WRAPPER_PASSWD
 
     LD_PRELOAD=/usr/local/nss_wrapper/lib64/libnss_wrapper.so
     export LD_PRELOAD
