@@ -7,7 +7,7 @@
 # Docker when building an image cannot copy in a file from outside of
 # the directory where the Dockerfile resides.
 
-# This script will run an interactive bash shell.
+# This script will execute the command passed as arguments.
 
 # Setup the environment if not already done.
 
@@ -17,4 +17,4 @@ fi
 
 # Now finally run bash.
 
-exec bash
+exec "$@"

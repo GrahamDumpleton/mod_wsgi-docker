@@ -18,6 +18,8 @@ COPY setup.sh /usr/local/bin/mod_wsgi-docker-setup
 RUN /usr/local/bin/mod_wsgi-docker-setup
 
 COPY build.sh /usr/local/bin/mod_wsgi-docker-build
+COPY environ.sh /usr/local/bin/mod_wsgi-docker-environ
+COPY entrypoint.sh /usr/local/bin/mod_wsgi-docker-entrypoint
 COPY start.sh /usr/local/bin/mod_wsgi-docker-start
 COPY shell.sh /usr/local/bin/mod_wsgi-docker-shell
 
