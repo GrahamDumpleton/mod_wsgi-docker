@@ -171,6 +171,11 @@ fi
 if [ -x .whiskey/action_hooks/start ]; then
     echo " -----> Running .whiskey/action_hooks/start"
     exec $TINI .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
-else
-    exec $TINI mod_wsgi-express start-server ${SERVER_ARGS} "$@"
 fi
+
+if [ -x /home/whiskey/action_hooks/start ]; then
+    echo " -----> Running /home/whiskey/action_hooks/start"
+    exec $TINI /home/whiskey/action_hooks/start ${SERVER_ARGS} "$@"
+fi
+
+exec $TINI mod_wsgi-express start-server ${SERVER_ARGS} "$@"
