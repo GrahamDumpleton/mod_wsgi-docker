@@ -132,8 +132,8 @@ fi
 
 if [ -f requirements.txt ]; then
     echo " -----> Installing dependencies with pip"
-    pip install --no-cache-dir -U --allow-all-external \
-        --exists-action=w --src=.whiskey/tmp -r requirements.txt
+    pip install --no-cache-dir -U --exists-action=w \
+        --src=.whiskey/tmp -r requirements.txt
 fi
 
 # Run any user supplied script to run after installing any application
