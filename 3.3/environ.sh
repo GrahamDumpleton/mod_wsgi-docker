@@ -63,7 +63,7 @@ if [ x"$WHISKEY_USER_ID" != x"0" -a x"$WHISKEY_USER_ID" != x"1001" ]; then
     export NSS_WRAPPER_PASSWD
     export NSS_WRAPPER_GROUP
 
-    cat /etc/passwd | sed -e 's/^whiskey:/yeksihw:/' > $NSS_WRAPPER_PASSWD
+    cat /etc/passwd | sed -e 's/^whiskey:/builder:/' > $NSS_WRAPPER_PASSWD
 
     echo "whiskey:x:$WHISKEY_USER_ID:0:Whiskey,,,:/home/whiskey:/bin/bash" >> $NSS_WRAPPER_PASSWD
 
