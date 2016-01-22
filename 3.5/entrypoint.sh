@@ -21,6 +21,12 @@ fi
 WHISKEY_PHASE=entrypoint
 export WHISKEY_PHASE
 
-# Now execute the command passed as arguments.
+# Now execute the command passed as arguments. If running as process ID
+# 1, we want to do that as a sub process to the 'tini' process, which
+# will perform reaping of zombie processes for us.
 
-exec tini -- "$@"
+if [ $$ = 1 ]; then
+    TINI="tini --"
+fi
+
+exec $TINI "$@"

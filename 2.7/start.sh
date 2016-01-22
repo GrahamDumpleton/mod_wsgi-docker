@@ -187,7 +187,7 @@ EOF
     rm -f $TMPFILE
 fi
 
-if [ x"$WHISKEY_PHASE" != x"entrypoint" ]; then
+if [ $$ = 1 ]; then
     TINI="tini --"
 fi
 
