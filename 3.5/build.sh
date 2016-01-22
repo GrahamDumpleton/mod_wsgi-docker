@@ -74,7 +74,7 @@ umask 002
 # warn about the old deprecated name. In case that the user is using old
 # name, just symlink the new location to the old.
 
-if test -d .docker/user_vars; then
+if [ -d .docker/user_vars ]; then
     echo " -----> Linking deprecated .docker/user_vars"
     echo "WARNING: Use directory .whiskey/user_vars instead."
     ln -s $WHISKEY_HOMEDIR/.docker/user_vars .whiskey/user_vars
@@ -95,7 +95,7 @@ fi
 # old name, just symlink the new location to the old. If both exist, then
 # this should fail.
 
-if test -d .docker/action_hooks; then
+if [ -d .docker/action_hooks ]; then
     echo " -----> Linking deprecated .docker/action_hooks"
     echo "WARNING: Use directory .whiskey/action_hooks instead."
     ln -s $WHISKEY_HOMEDIR/.docker/action_hooks .whiskey/action_hooks

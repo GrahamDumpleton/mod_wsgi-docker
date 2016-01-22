@@ -234,8 +234,8 @@ export PATH
 
 curl -SL 'https://bootstrap.pypa.io/get-pip.py' | python
 
-if test ! -f $INSTALL_ROOT/python/bin/pip; then
-    if test -f $INSTALL_ROOT/python/bin/pip3; then
+if [ ! -f $INSTALL_ROOT/python/bin/pip ]; then
+    if [ -f $INSTALL_ROOT/python/bin/pip3 ]; then
         ln -s pip3 $INSTALL_ROOT/python/bin/pip
     fi
 fi

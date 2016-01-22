@@ -119,7 +119,7 @@ for name in `ls $WHISKEY_ENVDIR`; do
 done
 
 for name in $envvars; do
-    if test ! -f $WHISKEY_ENVDIR/$name; then
+    if [ ! -f $WHISKEY_ENVDIR/$name ]; then
         unset $name
     fi
 done

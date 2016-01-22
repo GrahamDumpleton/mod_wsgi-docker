@@ -43,120 +43,120 @@ fi
 
 SERVER_ARGS="--log-to-terminal --startup-log --port 80"
 
-if test x"$MOD_WSGI_PROCESSES" != x""; then
+if [ x"$MOD_WSGI_PROCESSES" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --processes $MOD_WSGI_PROCESSES"
 fi
 
-if test x"$MOD_WSGI_THREADS" != x""; then
+if [ x"$MOD_WSGI_THREADS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --threads $MOD_WSGI_THREADS"
 fi
 
-if test x"$MOD_WSGI_MAX_CLIENTS" != x""; then
+if [ x"$MOD_WSGI_MAX_CLIENTS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --max-clients $MOD_WSGI_MAX_CLIENTS"
 fi
 
-if test x"$MOD_WSGI_INITIAL_WORKERS" != x""; then
+if [ x"$MOD_WSGI_INITIAL_WORKERS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --initial-workers $MOD_WSGI_INITIAL_WORKERS"
 fi
 
-if test x"$MOD_WSGI_MINIMUM_SPARE_WORKERS" != x""; then
+if [ x"$MOD_WSGI_MINIMUM_SPARE_WORKERS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --minimum-spare-workers $MOD_WSGI_MINIMUM_SPARE_WORKERS"
 fi
 
-if test x"$MOD_WSGI_MAXIMUM_SPARE_WORKERS" != x""; then
+if [ x"$MOD_WSGI_MAXIMUM_SPARE_WORKERS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --maximum-spare-workers $MOD_WSGI_MAXIMUM_SPARE_WORKERS"
 fi
 
-if test x"$MOD_WSGI_LIMIT_REQUEST_BODY" != x""; then
+if [ x"$MOD_WSGI_LIMIT_REQUEST_BODY" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --limit-request-body $MOD_WSGI_LIMIT_REQUEST_BODY"
 fi
 
-if test x"$MOD_WSGI_MAXIMUM_REQUESTS" != x""; then
+if [ x"$MOD_WSGI_MAXIMUM_REQUESTS" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --maximum-requests $MOD_WSGI_MAXIMUM_REQUESTS"
 fi
 
-if test x"$MOD_WSGI_INACTIVITY_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_INACTIVITY_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --inactivity-timeout $MOD_WSGI_INACTIVITY_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_REQUEST_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_REQUEST_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --request-timeout $MOD_WSGI_REQUEST_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_CONNECT_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_CONNECT_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --connect-timeout $MOD_WSGI_CONNECT_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_SOCKET_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_SOCKET_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --socket-timeout $MOD_WSGI_SOCKET_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_QUEUE_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_QUEUE_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --queue-timeout $MOD_WSGI_QUEUE_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_HEADER_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_HEADER_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --header-timeout $MOD_WSGI_HEADER_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_HEADER_MAX_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_HEADER_MAX_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --header-max-timeout $MOD_WSGI_HEADER_MAX_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_HEADER_MIN_RATE" != x""; then
+if [ x"$MOD_WSGI_HEADER_MIN_RATE" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --header-min-rate $MOD_WSGI_HEADER_MIN_RATE"
 fi
 
-if test x"$MOD_WSGI_BODY_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_BODY_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --body-timeout $MOD_WSGI_BODY_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_BODY_MAX_TIMEOUT" != x""; then
+if [ x"$MOD_WSGI_BODY_MAX_TIMEOUT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --body-max-timeout $MOD_WSGI_BODY_MAX_TIMEOUT"
 fi
 
-if test x"$MOD_WSGI_BODY_MIN_RATE" != x""; then
+if [ x"$MOD_WSGI_BODY_MIN_RATE" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --body-min-rate $MOD_WSGI_BODY_MIN_RATE"
 fi
 
-if test x"$MOD_WSGI_SERVER_BACKLOG" != x""; then
+if [ x"$MOD_WSGI_SERVER_BACKLOG" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --server-backlog $MOD_WSGI_SERVER_BACKLOG"
 fi
 
-if test x"$MOD_WSGI_DAEMON_BACKLOG" != x""; then
+if [ x"$MOD_WSGI_DAEMON_BACKLOG" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --daemon-backlog $MOD_WSGI_DAEMON_BACKLOG"
 fi
 
-if test x"$MOD_WSGI_SERVER_MPM" != x""; then
+if [ x"$MOD_WSGI_SERVER_MPM" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --server-mpm $MOD_WSGI_SERVER_MPM"
 fi
 
-if test x"$MOD_WSGI_LOG_LEVEL" != x""; then
+if [ x"$MOD_WSGI_LOG_LEVEL" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --log-level $MOD_WSGI_LOG_LEVEL"
 fi
 
-if test x"$MOD_WSGI_RELOAD_ON_CHANGES" != x""; then
+if [ x"$MOD_WSGI_RELOAD_ON_CHANGES" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --reload-on-changes"
 fi
 
-if test x"$MOD_WSGI_ENABLE_DEBUGGER" != x""; then
+if [ x"$MOD_WSGI_ENABLE_DEBUGGER" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --debug-mode --enable-debugger"
 fi
 
-if test x"$MOD_WSGI_WORKING_DIRECTORY" != x""; then
+if [ x"$MOD_WSGI_WORKING_DIRECTORY" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --working-directory $MOD_WSGI_WORKING_DIRECTORY"
 fi
 
-if test x"$MOD_WSGI_APPLICATION_TYPE" != x""; then
+if [ x"$MOD_WSGI_APPLICATION_TYPE" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --application-type $MOD_WSGI_APPLICATION_TYPE"
 fi
 
-if test x"$MOD_WSGI_ENTRY_POINT" != x""; then
+if [ x"$MOD_WSGI_ENTRY_POINT" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --entry-point $MOD_WSGI_ENTRY_POINT"
 fi
 
-if test x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
-        x"$NEW_RELIC_CONFIG_FILE" != x""; then
+if [ x"$NEW_RELIC_LICENSE_KEY" != x"" -o \
+        x"$NEW_RELIC_CONFIG_FILE" != x"" ]; then
     SERVER_ARGS="$SERVER_ARGS --with-newrelic"
 fi
 
