@@ -49,15 +49,21 @@ assemble() {
     mod_wsgi-docker-build
 
     # Need to make everything group writable so that 'oc rsync' will
-    # work when deploying the image to OpenShift and trying to do
-    # live updates in a running container. This means we are even making
+    # work when deploying the image to OpenShift and trying to do live
+    # updates in a running container. This means we are even making
     # files which are not writable by the owner writable by the group,
-    # but this is the only way to make it work when running container
-    # as an arbitrary user ID and relying on group access controls.
+    # but this is the only way to make it work when running container as
+    # an arbitrary user ID and relying on group access controls.
+    #
+    # Note that this will fail to change the permissions of the /app
+    # directory itself. We therefore suppress any warnings, but we also
+    # need to ignore the exit status as any failure will cause an error
+    # exit status even though permissions of remaining files are updated
+    # as we require.
 
     echo "---> Fix permissions on application source"
 
-    chmod -f g+w /app
+    chmod -Rf g+w /app || true
 }
 
 artifacts() {
