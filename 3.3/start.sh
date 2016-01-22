@@ -26,6 +26,12 @@ fi
 #
 #   https://github.com/docker/docker/issues/9547
 
+if [ -f .whiskey/action_hooks/deploy ]; then
+    if [ ! -x .whiskey/action_hooks/deploy ]; then
+        echo "WARNING: Script .whiskey/action_hooks/deploy not executable."
+    fi
+fi
+
 if [ -x .whiskey/action_hooks/deploy ]; then
     echo " -----> Running .whiskey/action_hooks/deploy"
     .whiskey/action_hooks/deploy
@@ -185,9 +191,21 @@ if [ x"$WHISKEY_PHASE" != x"entrypoint" ]; then
     TINI="tini --"
 fi
 
+if [ -f .whiskey/action_hooks/start ]; then
+    if [ ! -x .whiskey/action_hooks/start ]; then
+        echo "WARNING: Script .whiskey/action_hooks/start not executable."
+    fi
+fi
+
 if [ -x .whiskey/action_hooks/start ]; then
     echo " -----> Running .whiskey/action_hooks/start"
     exec $TINI .whiskey/action_hooks/start ${SERVER_ARGS} "$@"
+fi
+
+if [ -f /home/whiskey/action_hooks/start ]; then
+    if [ ! -x /home/whiskey/action_hooks/start ]; then
+        echo "WARNING: Script /home/whiskey/action_hooks/start not executable."
+    fi
 fi
 
 if [ -x /home/whiskey/action_hooks/start ]; then

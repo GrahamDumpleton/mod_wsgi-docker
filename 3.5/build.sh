@@ -101,6 +101,12 @@ if [ -d .docker/action_hooks ]; then
     ln -s $WHISKEY_HOMEDIR/.docker/action_hooks .whiskey/action_hooks
 fi
 
+if [ -f .whiskey/action_hooks/pre-build ]; then
+    if [ ! -x .whiskey/action_hooks/pre-build ]; then
+        echo "WARNING: Script .whiskey/action_hooks/pre-build not executable."
+    fi
+fi
+
 if [ -x .whiskey/action_hooks/pre-build ]; then
     echo " -----> Running .whiskey/action_hooks/pre-build"
     .whiskey/action_hooks/pre-build

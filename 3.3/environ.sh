@@ -105,6 +105,12 @@ done
 # Run any user supplied script to be run to set, modify or delete the
 # environment variables.
 
+if [ -f .whiskey/action_hooks/deploy-env ]; then
+    if [ ! -x .whiskey/action_hooks/deploy-env ]; then
+        echo "WARNING: Script .whiskey/action_hooks/deploy-env not executable."
+    fi
+fi
+
 if [ -x .whiskey/action_hooks/deploy-env ]; then
     echo " -----> Running .whiskey/action_hooks/deploy-env"
     .whiskey/action_hooks/deploy-env
