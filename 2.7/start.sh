@@ -162,6 +162,23 @@ fi
 
 if [ -f .whiskey/server_args ]; then
     SERVER_ARGS="$SERVER_ARGS `cat .whiskey/server_args`"
+
+    # Expand any environment variable references in options.
+
+    TMPFILE=/tmp/server_args.$$
+
+    cat > $TMPFILE << EOF
+#!/bin/sh
+cat << !
+$SERVER_ARGS
+!
+EOF
+
+    chmod +x $TMPFILE
+
+    SERVER_ARGS=`$TMPFILE`
+
+    rm -f $TMPFILE
 fi
 
 if [ x"$WHISKEY_PHASE" != x"entrypoint" ]; then
