@@ -1,13 +1,13 @@
 FROM debian:jessie
 
 ENV PYTHON_VERSION=3.5.1 \
-    NGHTTP2_VERSION=1.6.0 \
+    NGHTTP2_VERSION=1.11.1 \
     APR_VERSION=1.5.2 \
     APR_UTIL_VERSION=1.5.4 \
-    APACHE_VERSION=2.4.18 \
-    MOD_WSGI_VERSION=4.4.22 \
-    NSS_WRAPPER_VERSION=1.1.2 \
-    TINI_VERSION=0.8.4
+    APACHE_VERSION=2.4.20 \
+    MOD_WSGI_VERSION=4.5.2 \
+    NSS_WRAPPER_VERSION=1.1.3 \
+    TINI_VERSION=0.9.0
 
 COPY install.sh /usr/local/bin/mod_wsgi-docker-install
 

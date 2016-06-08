@@ -261,13 +261,6 @@ find $INSTALL_ROOT -type d -exec chmod g+ws {} \;
 find $INSTALL_ROOT -perm 2755 -exec chmod g+w {} \;
 find $INSTALL_ROOT -perm 0644 -exec chmod g+w {} \;
 
-# Try and force file system sync to workaround a bug in Docker which
-# causes automated builds on Docker Hub to fail. Issue is that setcap
-# below fails because attribute changes seem not to have been flushed
-# out to file system properly.
-
-sync; sleep 1; sync; sleep 1; sync; sleep 1
-
 # Because the recommendation is that the derived Docker image should run
 # as a non root user, we enable the ability for Apache 'httpd'  when run
 # as a non root user to bind privileged ports normally used by system
