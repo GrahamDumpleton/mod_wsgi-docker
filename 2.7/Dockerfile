@@ -7,7 +7,7 @@ ENV PYTHON_VERSION=2.7.11 \
     APACHE_VERSION=2.4.23 \
     MOD_WSGI_VERSION=4.5.7 \
     NSS_WRAPPER_VERSION=1.1.3 \
-    TINI_VERSION=0.9.0
+    TINI_VERSION=0.10.0
 
 COPY install.sh /usr/local/bin/mod_wsgi-docker-install
 
