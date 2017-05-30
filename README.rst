@@ -51,7 +51,7 @@ The Python web application should then be accessible at port 8000 of the
 docker host.
 
 Note that although your specific Python web application when run will run
-as the non root user ``www-data``, the Apache server itself will initially
+as the non root user ``whiskey``, the Apache server itself will initially
 start up as the root user. Some Docker runtime environments however may be
 set up so as to prohibit you running your container as the root user and
 require a non root user from the outset.
