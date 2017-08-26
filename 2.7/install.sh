@@ -27,7 +27,7 @@ set -eo pipefail
 
 # Ensure we have an up to date package index.
 
-rm -r /var/lib/apt/lists/* 
+rm -rf /var/lib/apt/lists/*
 
 apt-get update
 
