@@ -86,19 +86,19 @@ mkdir $BUILD_ROOT/nghttp2
 
 tar -xC $BUILD_ROOT/nghttp2 --strip-components=1 -f $BUILD_ROOT/nghttp2.tar.gz
 
-curl -SL -o $BUILD_ROOT/apr.tar.gz http://mirror.ventraip.net.au/apache/apr/apr-$APR_VERSION.tar.gz
+curl -SL -o $BUILD_ROOT/apr.tar.gz https://archive.apache.org/dist/apr/apr-$APR_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apr
 
 tar -xC $BUILD_ROOT/apr --strip-components=1 -f $BUILD_ROOT/apr.tar.gz
 
-curl -SL -o $BUILD_ROOT/apr-util.tar.gz http://mirror.ventraip.net.au/apache/apr/apr-util-$APR_UTIL_VERSION.tar.gz
+curl -SL -o $BUILD_ROOT/apr-util.tar.gz https://archive.apache.org/dist/apr/apr-util-$APR_UTIL_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apr-util
 
 tar -xC $BUILD_ROOT/apr-util --strip-components=1 -f $BUILD_ROOT/apr-util.tar.gz
 
-curl -SL -o $BUILD_ROOT/apache.tar.gz http://mirror.ventraip.net.au/apache/httpd/httpd-$APACHE_VERSION.tar.gz
+curl -SL -o $BUILD_ROOT/apache.tar.gz https://archive.apache.org/dist/httpd/httpd-$APACHE_VERSION.tar.gz
 
 mkdir $BUILD_ROOT/apache
 
