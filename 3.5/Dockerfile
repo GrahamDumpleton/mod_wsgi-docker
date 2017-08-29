@@ -29,9 +29,9 @@ RUN cd /usr/local/s2i/bin; ln -s assemble save-artifacts; \
     ln -s assemble run; ln -s assemble usage
 
 LABEL io.k8s.description="Builder for Python web applications." \
-      io.k8s.display-name="Apache/mod_wsgi (Python 2.7)" \
+      io.k8s.display-name="Apache/mod_wsgi (Python 3.5)" \
       io.openshift.expose-services="80:http" \
-      io.openshift.tags="builder,mod_wsgi,python-2.7,mod_wsgi-python-2.7" \
+      io.openshift.tags="builder,mod_wsgi,python-3.5,mod_wsgi-python-3.5" \
       io.openshift.s2i.scripts-url="image:///usr/local/s2i/bin"
 
 ENV STI_SCRIPTS_PATH=/usr/local/s2i/bin
